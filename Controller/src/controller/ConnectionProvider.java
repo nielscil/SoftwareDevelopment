@@ -12,6 +12,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import controller.Helpers.StringHelper;
+import java.io.Closeable;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -22,7 +24,7 @@ import java.util.concurrent.TimeoutException;
  *
  * @author Niels
  */
-public class ConnectionProvider extends Observable
+public class ConnectionProvider extends Observable implements Closeable
 {
     private final String ControllerQueueName = "Controller";
     private final String SimulatorQueueName = "Simulator";
@@ -33,14 +35,21 @@ public class ConnectionProvider extends Observable
     private Connection _simulatorQueue;
     private Channel _simulatorChannel;
     
-    public ConnectionProvider(String host, String groupId) throws IOException, TimeoutException
+    public ConnectionProvider(String host, String groupId, String username, String password) throws IOException, TimeoutException
     {
         _factory = new ConnectionFactory();
         _factory.setHost(host);
-        if("".equals(groupId))
+        if(!StringHelper.IsNullOrWhitespace(groupId))
         {
             _factory.setVirtualHost(groupId);
-        }      
+        }
+        
+        if(!StringHelper.IsNullOrWhitespace(username) && !StringHelper.IsNullOrWhitespace(password))
+        {
+            _factory.setUsername(username);
+            _factory.setPassword(password);
+        }
+        
         CreateControllerQueue();
         CreateSimulatorQueue();
     }
@@ -76,5 +85,42 @@ public class ConnectionProvider extends Observable
         _simulatorQueue = _factory.newConnection();
         _simulatorChannel = _simulatorQueue.createChannel();
         _simulatorChannel.queueDeclare(SimulatorQueueName, false, false, true, null);
+    }
+
+    @Override
+    public void close() throws IOException
+    {
+        try
+        {
+            if(_simulatorChannel != null)
+            {
+                _simulatorChannel.close();
+                _simulatorChannel = null;
+            }
+            
+            if(_simulatorQueue != null)
+            {
+                _simulatorQueue.close();
+                _simulatorQueue = null;
+            }
+            
+            if(_controllerChannel != null)
+            {
+                _controllerChannel.close();
+                _controllerChannel = null;
+            }
+            
+            if(_controllerQueue != null)
+            {
+                _controllerQueue.close();
+                _controllerQueue = null;
+            }
+            
+            deleteObservers();
+        }
+        catch(Exception e)
+        {
+            
+        }
     }
 }

@@ -59,6 +59,9 @@ ExportedObj/
 *.svd
 *.pdb
 
+!*/C# Example/*.sln
+!*/C# Example/*.csproj
+
 # Unity3D generated meta files
 *.pidb.meta
 
