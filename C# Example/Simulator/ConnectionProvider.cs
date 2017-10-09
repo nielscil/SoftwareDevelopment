@@ -33,7 +33,7 @@ namespace Simulator
             }
         }
 
-        public ConnectionProvider(string host, string groupId = null, string username = "softdev", string password = "softdev")
+        public ConnectionProvider(string host, string groupId = null, string username = null, string password = null)
         {
             _factory = new ConnectionFactory();
             _factory.HostName = host;
@@ -88,7 +88,7 @@ namespace Simulator
 
         public void Send(object obj)
         {
-            string serialized = "Simulator groepje"; // serialize with json parser
+            string serialized = "Simulator 9"; // serialize with json parser
             byte[] data = Encoding.UTF8.GetBytes(serialized);
             _controllerChannel.BasicPublish("", ControllerQueueName, null, data);
         }

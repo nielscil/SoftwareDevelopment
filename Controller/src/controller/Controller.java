@@ -5,7 +5,11 @@
  */
 package controller;
 
-import controller.Helpers.StringHelper;
+import Models.Direction;
+import Models.Light;
+import Models.Status;
+import Models.TrafficUpdate;
+import controller.Helpers.JsonHelper;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
@@ -35,6 +39,14 @@ public class Controller implements Observer
      */
     public static void main(String[] args) throws IOException
     {
+        TrafficUpdate light = new TrafficUpdate();
+        light.LightId = 1;
+        light.DirectionRequests = null;
+        
+        String json = JsonHelper.instance().Serialize(light);
+        light = null;
+        Object obj = JsonHelper.instance().Parse(json);
+        
         String host = args.length > 0 ? args[0] : GetUserInput("What is the host address");
         String groupId = args.length > 1 ? args[1] : GetUserInput("What is the groupId");
         String username = args.length > 2 ? args[2] : GetUserInput("What is the username");
@@ -61,7 +73,7 @@ public class Controller implements Observer
         }
         catch(Exception e)
         {
-            
+            System.err.println(e.toString());
         }
         return null;
     }
@@ -69,13 +81,13 @@ public class Controller implements Observer
     @Override
     public void update(Observable o, Object arg)
     {
-        System.out.print(arg);
+        System.out.println(arg);
         try
         {
             _provider.Send(arg);
         } catch (IOException ex)
         {
-             
+             System.err.println(ex.toString());
         }
     }
     

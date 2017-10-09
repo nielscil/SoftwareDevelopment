@@ -5,6 +5,10 @@
  */
 package controller;
 
+import Models.Direction;
+import Models.Status;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -12,6 +16,9 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import Serializers.DirectionSerializer;
+import Serializers.StatusSerializer;
+import com.google.gson.JsonElement;
 import controller.Helpers.StringHelper;
 import java.io.Closeable;
 
@@ -28,13 +35,14 @@ public class ConnectionProvider extends Observable implements Closeable
 {
     private final String ControllerQueueName = "Controller";
     private final String SimulatorQueueName = "Simulator";
+    private final String GroupId = "9";
     
     private final ConnectionFactory _factory;
     private Connection _controllerQueue;
     private Channel _controllerChannel;
     private Connection _simulatorQueue;
     private Channel _simulatorChannel;
-    
+
     public ConnectionProvider(String host, String groupId, String username, String password) throws IOException, TimeoutException
     {
         _factory = new ConnectionFactory();
@@ -56,8 +64,8 @@ public class ConnectionProvider extends Observable implements Closeable
     
     public void Send(Object obj) throws UnsupportedEncodingException, IOException
     {
-        String serialzed = "Controller: 5";
-        byte[] bytes = serialzed.getBytes("UTF-8");
+        String serialized = "Controller: " + GroupId;
+        byte[] bytes = serialized.getBytes("UTF-8");
         _simulatorChannel.basicPublish("", SimulatorQueueName, null, bytes);
     }
     
@@ -73,6 +81,8 @@ public class ConnectionProvider extends Observable implements Closeable
             {
                 String data = new String(body,"UTF-8");
                 Object obj  = data; //deserialize
+                
+                
                 setChanged();
                 notifyObservers(obj);
             }
@@ -120,7 +130,7 @@ public class ConnectionProvider extends Observable implements Closeable
         }
         catch(Exception e)
         {
-            
+            System.err.println(e.toString());
         }
     }
 }
