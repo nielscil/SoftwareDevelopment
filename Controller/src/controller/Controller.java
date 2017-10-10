@@ -6,11 +6,11 @@
 package controller;
 
 import Models.Direction;
-import Models.Light;
-import Models.Status;
+import Models.ObserverArgs;
 import Models.TrafficUpdate;
 import controller.Helpers.JsonHelper;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
@@ -38,15 +38,7 @@ public class Controller implements Observer
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException
-    {
-        TrafficUpdate light = new TrafficUpdate();
-        light.LightId = 1;
-        light.DirectionRequests = null;
-        
-        String json = JsonHelper.instance().Serialize(light);
-        light = null;
-        Object obj = JsonHelper.instance().Parse(json);
-        
+    {                  
         String host = args.length > 0 ? args[0] : GetUserInput("What is the host address");
         String groupId = args.length > 1 ? args[1] : GetUserInput("What is the groupId");
         String username = args.length > 2 ? args[2] : GetUserInput("What is the username");

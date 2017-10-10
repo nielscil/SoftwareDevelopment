@@ -5,18 +5,12 @@
  */
 package controller.Helpers;
 
-import Models.Direction;
-import Models.Light;
-import Models.Speed;
-import Models.Status;
-import Models.TrafficUpdate;
+import Models.*;
 import Serializers.DirectionSerializer;
 import Serializers.StatusSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import java.lang.reflect.Type;
 
 /**
  *
@@ -26,7 +20,7 @@ public class JsonHelper
 {  
     private static JsonHelper _instance;
     
-    private static final String LightTypeIdentifier = "LightId";
+    private static final String LightTypeIdentifier = "TrafficUpdate";
     private static final String SpeedTypeIdentifier = "Speed";
     
     private final Gson _gson;
@@ -39,38 +33,34 @@ public class JsonHelper
         _gson = builder.create();
     }
       
-    public Object Parse(String input)
+    public ObserverArgs Parse(String input)
     {
-        return _gson.fromJson(input, GetType(input));
-    }
-    
-    public String Serialize(Object obj)
-    {
-        return _gson.toJson(obj);
-    }
-    
-    private Type GetType(String input)
-    {
+        TrafficUpdate trafficUpdate = null;
+        Speed speed = null;
         try
         {
-            JsonObject obj = _gson.fromJson(input, JsonObject.class);
-            
-            if(obj.has(LightTypeIdentifier))
+            JsonObject jsonObj = _gson.fromJson(input, JsonObject.class);
+
+            if(jsonObj.has(LightTypeIdentifier))
             {
-                return TrafficUpdate.class;
+                trafficUpdate = _gson.fromJson(jsonObj.get(LightTypeIdentifier), TrafficUpdate.class);
             }
             
-            if(obj.has(SpeedTypeIdentifier))
+            if(jsonObj.has(SpeedTypeIdentifier))
             {
-                return Speed.class;
+                speed = _gson.fromJson(jsonObj.get(SpeedTypeIdentifier), Speed.class);
             }
 
         }
         catch(Exception e)
         {
-            return null;
-        }
-        return null;
+        }        
+        return new ObserverArgs(trafficUpdate, speed);
+    }
+    
+    public String Serialize(Object obj)
+    {
+        return _gson.toJson(obj);
     }
     
     public boolean isValidJSON(String toTestStr) 

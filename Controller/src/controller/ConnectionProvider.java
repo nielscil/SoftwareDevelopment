@@ -5,10 +5,6 @@
  */
 package controller;
 
-import Models.Direction;
-import Models.Status;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -16,9 +12,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
-import Serializers.DirectionSerializer;
-import Serializers.StatusSerializer;
-import com.google.gson.JsonElement;
+
 import controller.Helpers.StringHelper;
 import java.io.Closeable;
 
@@ -80,6 +74,7 @@ public class ConnectionProvider extends Observable implements Closeable
             public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) throws IOException
             {
                 String data = new String(body,"UTF-8");
+                
                 Object obj  = data; //deserialize
                 
                 
