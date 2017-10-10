@@ -38,7 +38,10 @@ public class Controller implements Observer
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException
-    {                   
+    {      
+        Intersection intersection = new Intersection();
+        String test = JsonHelper.instance().Serialize(intersection.GetSerializable());
+        
         String host = args.length > 0 ? args[0] : GetUserInput("What is the host address");
         String groupId = args.length > 1 ? args[1] : GetUserInput("What is the groupId");
         String username = args.length > 2 ? args[2] : GetUserInput("What is the username");

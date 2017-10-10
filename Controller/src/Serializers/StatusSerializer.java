@@ -5,7 +5,8 @@
  */
 package Serializers;
 
-import Models.Status;
+import Models.State;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
@@ -15,11 +16,11 @@ import java.lang.reflect.Type;
  *
  * @author Niels
  */
-public class StatusSerializer implements JsonSerializer<Status>
+public class StatusSerializer implements JsonSerializer<State>
 {
 
     @Override
-    public JsonElement serialize(Status t, Type type, JsonSerializationContext jsc)
+    public JsonElement serialize(State t, Type type, JsonSerializationContext jsc)
     {
         return jsc.serialize(t.ordinal());
     }

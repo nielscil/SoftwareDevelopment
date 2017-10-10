@@ -5,6 +5,7 @@
  */
 package controller;
 
+import Models.Speed;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -12,6 +13,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import controller.Helpers.JsonHelper;
 
 import controller.Helpers.StringHelper;
 import java.io.Closeable;
@@ -19,13 +21,14 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.TimeoutException;
 
 /**
  *
  * @author Niels
  */
-public class ConnectionProvider extends Observable implements Closeable
+public class ConnectionProvider extends Observable implements Closeable, Observer
 {
     private final String ControllerQueueName = "Controller";
     private final String SimulatorQueueName = "Simulator";
@@ -58,7 +61,7 @@ public class ConnectionProvider extends Observable implements Closeable
     
     public void Send(Object obj) throws UnsupportedEncodingException, IOException
     {
-        String serialized = "Controller: " + GroupId;
+        String serialized = JsonHelper.instance().Serialize(obj);
         byte[] bytes = serialized.getBytes("UTF-8");
         _simulatorChannel.basicPublish("", SimulatorQueueName, null, bytes);
     }
@@ -74,12 +77,8 @@ public class ConnectionProvider extends Observable implements Closeable
             public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) throws IOException
             {
                 String data = new String(body,"UTF-8");
-                
-                Object obj  = data; //deserialize
-                
-                
                 setChanged();
-                notifyObservers(obj);
+                notifyObservers(JsonHelper.instance().Parse(data));
             }
         };
         _controllerChannel.basicConsume(ControllerQueueName, false, consumer);
@@ -126,6 +125,15 @@ public class ConnectionProvider extends Observable implements Closeable
         catch(Exception e)
         {
             System.err.println(e.toString());
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object arg)
+    {
+        if(o instanceof Intersection)
+        {
+            
         }
     }
 }

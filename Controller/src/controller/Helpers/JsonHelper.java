@@ -6,8 +6,7 @@
 package controller.Helpers;
 
 import Models.*;
-import Serializers.DirectionSerializer;
-import Serializers.StatusSerializer;
+import Serializers.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -28,7 +27,8 @@ public class JsonHelper
     {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Direction.class, new DirectionSerializer());
-        builder.registerTypeAdapter(Status.class, new StatusSerializer());
+        builder.registerTypeAdapter(State.class, new StatusSerializer());
+        builder.registerTypeAdapter(LightNumber.class, new LightNumberSerializer());
         builder.serializeNulls();
         _gson = builder.create();
     }
@@ -48,7 +48,7 @@ public class JsonHelper
             
             if(jsonObj.has(SpeedTypeIdentifier))
             {
-                speed = _gson.fromJson(jsonObj.get(SpeedTypeIdentifier), Speed.class);
+                speed = _gson.fromJson(jsonObj, Speed.class);
             }
 
         }
