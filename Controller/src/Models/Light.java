@@ -5,6 +5,8 @@
  */
 package Models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 
 /**
@@ -15,11 +17,21 @@ public class Light extends Observable
 {
     public LightNumber Id;
     public State Status = State.Red;
-    //private final transient List<Light> _dependencies = new ArrayList<>();
+    protected final transient List<Tuple<Light,Direction>> _dependencies = new ArrayList<>();
     
     public Light(int id)
     {
         Id = LightNumber.get(id);
+    }
+    
+    public void addDependency(Light light, Direction direction)
+    {
+        _dependencies.add(new Tuple<>(light,direction));
+    }
+    
+    public void addDependency(Light light)
+    {
+        addDependency(light, null);
     }
     
     public void setStatus(State state) throws Exception

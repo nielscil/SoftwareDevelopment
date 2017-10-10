@@ -5,9 +5,13 @@
  */
 package controller;
 
+import Models.BusLight;
+import Models.Direction;
 import Models.Light;
 import Models.LightNumber;
 import Models.SerializeableIntersection;
+import controller.Helpers.DependenciesHelper;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +37,7 @@ public class Intersection extends Observable implements Observer
         AddLights(100, 10);
         
         //bus traffic light
-        AddLights(200, 1);
+        AddLights(200, 1, BusLight.class);
         
         //bicyle traffic lights
         AddLights(300, 5);
@@ -44,19 +48,35 @@ public class Intersection extends Observable implements Observer
         //train lights
         AddLights(500, 1);
         AddLights(600, 1);
+        
+        //populate dependencies
+        DependenciesHelper.populate(this);
     }
     
-    private void AddLights(int IdOffset, int count)
+    private <T extends Light> void AddLights (int IdOffset, int count, Class<T> classType)
     {
-        for(int i = 1; i <= count; i++)
+        try
         {
-            Light light = new Light(IdOffset + i);
-            _lights.add(light);
-            _lightsMap.put(light.Id, light);
-            light.addObserver(this);
+            Constructor<T> constructor = classType.getConstructor(new Class<?>[] { int.class });
+            for(int i = 1; i <= count; i++)
+            {
+                T light = constructor.newInstance(IdOffset + i);
+                _lights.add(light);
+                _lightsMap.put(light.Id, light);
+                light.addObserver(this);
+            }
+        }
+        catch(Exception e)
+        {
+            System.err.println(e.toString());
         }
     }
     
+    private <T extends Light> void AddLights (int IdOffset, int count)
+    {
+        AddLights(IdOffset,count, Light.class);
+    }
+            
     public Light getLight(LightNumber id)
     {
         return _lightsMap.get(id);

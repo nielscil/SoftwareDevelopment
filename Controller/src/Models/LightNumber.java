@@ -41,7 +41,7 @@ public enum LightNumber
     BicycleSouthNorthEastSide_304(304),
     BicycleSouthNorthWestSide_305(305),
     
-    WalkSouthWestSide_406(406),
+    WalkSouthNorthWestSide_406(406),
     WalkSouthNorthEastSide_405(405),
     
     //West side intersection
