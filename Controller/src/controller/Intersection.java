@@ -6,7 +6,6 @@
 package controller;
 
 import Models.BusLight;
-import Models.Direction;
 import Models.Light;
 import Models.LightNumber;
 import Models.SerializeableIntersection;
