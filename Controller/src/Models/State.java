@@ -23,6 +23,21 @@ public enum State
         return this == Green || this == GreenAll || this == GreenLeft || this == GreenRight;
     }
     
+    public boolean isGreen(Direction direction)
+    {
+        switch(direction)
+        {
+            case Left:
+                return this == GreenLeft || this == GreenAll;
+            case Right:
+                return this == GreenRight || this == GreenAll;
+            case StraightAhead:
+                return this == Green || this == GreenAll;
+            default:
+                return false;
+        }
+    }
+    
     public boolean isRed()
     {
         return this == Red;

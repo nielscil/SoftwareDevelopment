@@ -5,15 +5,18 @@
  */
 package Models;
 
-import java.util.List;
-
 /**
  *
  * @author Niels
  */
-public class TrafficUpdate
+public class Dependency
 {
-    public LightNumber LightId;
-    public int Count;
-    public List<Direction> DirectionRequests;
+    public final Light Light;
+    public final Direction Direction;
+    
+    public Dependency(Light light, Direction direction)
+    {
+        Light = light;
+        Direction = direction;
+    }
 }

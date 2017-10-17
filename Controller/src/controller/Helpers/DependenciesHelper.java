@@ -5,6 +5,7 @@
  */
 package controller.Helpers;
 
+import Models.BusLight;
 import Models.Direction;
 import Models.Light;
 import Models.LightNumber;
@@ -231,7 +232,7 @@ public class DependenciesHelper
     
     private void setEastBus201()
     {
-        Light l = getLight(LightNumber.EastBus_201);
+        BusLight l = (BusLight)getLight(LightNumber.EastBus_201);
         
         //set for all dependencies
         setEastWalkAndBicylceDependencies(l);
@@ -358,7 +359,7 @@ public class DependenciesHelper
         
         l.addDependency(getLight(LightNumber.SouthLeft_107));
         l.addDependency(getLight(LightNumber.SouthStraightRight_106));
-        l.addDependency(getLight(LightNumber.SouthRailRoadCrossing_601));     
+        //l.addDependency(getLight(LightNumber.SouthRailRoadCrossing_601));     
     }
     
     private void SetSouthRailRoadCrossing_601()
@@ -404,7 +405,7 @@ public class DependenciesHelper
     private void setTrainDependency(Light l)
     {
         l.addDependency(getLight(LightNumber.SouthTrainSignal_501));
-        l.addDependency(getLight(LightNumber.SouthRailRoadCrossing_601));
+        //l.addDependency(getLight(LightNumber.SouthRailRoadCrossing_601));
     }
         
     private Light getLight(LightNumber lightNumber)

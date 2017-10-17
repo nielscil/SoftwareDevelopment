@@ -5,7 +5,6 @@
  */
 package controller;
 
-import Models.Speed;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -13,13 +12,13 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
-import controller.Helpers.JsonHelper;
+import controller.Helpers.*;
 
-import controller.Helpers.StringHelper;
 import java.io.Closeable;
-
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.TimeoutException;
@@ -40,13 +39,13 @@ public class ConnectionProvider extends Observable implements Closeable, Observe
     private Connection _simulatorQueue;
     private Channel _simulatorChannel;
 
-    public ConnectionProvider(String host, String groupId, String username, String password) throws IOException, TimeoutException
+    public ConnectionProvider(String host, String username, String password, boolean  useGroupId) throws IOException, TimeoutException
     {
         _factory = new ConnectionFactory();
         _factory.setHost(host);
-        if(!StringHelper.IsNullOrWhitespace(groupId))
+        if(useGroupId)
         {
-            _factory.setVirtualHost("/" + groupId);
+            _factory.setVirtualHost("/" + GroupId);
         }
         
         if(!StringHelper.IsNullOrWhitespace(username) && !StringHelper.IsNullOrWhitespace(password))
@@ -59,18 +58,26 @@ public class ConnectionProvider extends Observable implements Closeable, Observe
         CreateSimulatorQueue();
     }
     
-    public void Send(Object obj) throws UnsupportedEncodingException, IOException
+    public void Send(Object obj)
     {
-        String serialized = JsonHelper.instance().Serialize(obj);
-        byte[] bytes = serialized.getBytes("UTF-8");
-        _simulatorChannel.basicPublish("", SimulatorQueueName, null, bytes);
+        try
+        {
+            String serialized = JsonHelper.instance().Serialize(obj);
+            //System.out.println(serialized);
+            byte[] bytes = serialized.getBytes("UTF-8");
+            _simulatorChannel.basicPublish("", SimulatorQueueName, null, bytes);
+        }
+        catch(Exception e)
+        {
+            System.err.println(e.toString());
+        }
     }
     
     private void CreateControllerQueue() throws IOException, TimeoutException
     {
         _controllerQueue = _factory.newConnection();
         _controllerChannel = _controllerQueue.createChannel();
-        _controllerChannel.queueDeclare(ControllerQueueName, false, false, true, null);
+        _controllerChannel.queueDeclare(ControllerQueueName, false, false, true, GetTimeToLifeArgs());
         Consumer consumer = new DefaultConsumer(_controllerChannel)
         {
             @Override
@@ -88,7 +95,14 @@ public class ConnectionProvider extends Observable implements Closeable, Observe
     {
         _simulatorQueue = _factory.newConnection();
         _simulatorChannel = _simulatorQueue.createChannel();
-        _simulatorChannel.queueDeclare(SimulatorQueueName, false, false, true, null);
+        _simulatorChannel.queueDeclare(SimulatorQueueName, false, false, true, GetTimeToLifeArgs());
+    }
+    
+    private Map<String, Object> GetTimeToLifeArgs()
+    {
+        Map<String, Object> args = new HashMap<>();
+        args.put("x-message-ttl", 10000);
+        return args;
     }
 
     @Override
@@ -131,9 +145,11 @@ public class ConnectionProvider extends Observable implements Closeable, Observe
     @Override
     public void update(Observable o, Object arg)
     {
-        if(o instanceof Intersection)
+        Intersection intersection = ClassHelper.safeCast(o, Intersection.class);
+        
+        if(intersection != null)
         {
-            
+            Send(intersection.GetSerializable());
         }
     }
 }

@@ -12,4 +12,13 @@ package Models;
 public class Speed
 {
     public float Speed;
+    
+    public Speed()
+    {
+    }
+    
+    public Speed(float speed)
+    {
+        Speed = speed;
+    }
 }

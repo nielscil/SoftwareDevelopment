@@ -6,9 +6,11 @@
 package controller;
 
 import Models.BusLight;
+import Models.CrosswayLight;
 import Models.Light;
 import Models.LightNumber;
 import Models.SerializeableIntersection;
+import Models.TrainLight;
 import controller.Helpers.DependenciesHelper;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -45,8 +47,8 @@ public class Intersection extends Observable implements Observer
         AddLights(400, 6);
         
         //train lights
-        AddLights(500, 1);
-        AddLights(600, 1);
+        AddLights(500, 1, TrainLight.class);
+        AddLights(600, 1, CrosswayLight.class);
         
         //populate dependencies
         DependenciesHelper.populate(this);
@@ -81,6 +83,11 @@ public class Intersection extends Observable implements Observer
         return _lightsMap.get(id);
     }
     
+    public List<Light> getLights()
+    {
+        return _lights;
+    }
+    
     public SerializeableIntersection GetSerializable()
     {
         return new SerializeableIntersection(_lights);
@@ -92,7 +99,7 @@ public class Intersection extends Observable implements Observer
         setChanged();
     }
     
-    public void Send()
+    public void saveChanges()
     {
         notifyObservers();
     }

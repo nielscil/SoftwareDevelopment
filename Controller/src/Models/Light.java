@@ -5,6 +5,7 @@
  */
 package Models;
 
+import controller.ControlRunner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -15,18 +16,15 @@ import java.util.Observable;
  */
 public class Light extends Observable
 {
-    public LightNumber Id;
+    public final LightNumber Id;
     public State Status = State.Red;
-    protected final transient List<Tuple<Light,Direction>> _dependencies = new ArrayList<>();
+    protected int _statusChangedTime = 0;
+    
+    protected final transient List<Dependency> _dependencies = new ArrayList<>();
     
     public Light(int id)
     {
         Id = LightNumber.get(id);
-    }
-    
-    public void addDependency(Light light, Direction direction)
-    {
-        _dependencies.add(new Tuple<>(light,direction));
     }
     
     public void addDependency(Light light)
@@ -34,41 +32,68 @@ public class Light extends Observable
         addDependency(light, null);
     }
     
-    public void setStatus(State state) throws Exception
+    public void addDependency(Light light, Direction direction)
     {
-        CheckIfNewStateIsPossible(state);
-        
-        Status = state;
-        setChanged();
-        notifyObservers();
+        Dependency dependency = new Dependency(light, direction);
+        if(!_dependencies.contains(dependency))
+        {
+            _dependencies.add(dependency);
+        }
+    }
+    
+    public long getStatusChangedTime()
+    {
+        return _statusChangedTime;
+    }
+    
+    public void setStatus(State state)
+    {
+        if(canSetStatus(state))
+        {
+            Status = state;
+            _statusChangedTime = ControlRunner.getTime();
+            setChanged();
+            notifyObservers();
+        }
     }
     
     public boolean canSetStatus(State state)
     {
-        try
-        {
-            CheckIfNewStateIsPossible(state);
-            return true;
-        }
-        catch(Exception e)
+        if(state.isGreen() && Status.isOrange())
         {
             return false;
         }
-    }
-    
-    private void CheckIfNewStateIsPossible(State state) throws Exception
-    {
-        if(Id != LightNumber.SouthRailRoadCrossing_601)
+
+        if(state.isRed() && Status.isGreen())
         {
-            if(state.isGreen() && Status.isOrange())
-            {
-                throw new Exception("Can't set orange to green without going to red");
-            }
-            
-            if(state.isRed() && Status.isGreen())
-            {
-                throw new Exception("Can't set green to red without going to orange");
-            }
+            return false;
         }
+        return ControlRunner.getTime() != _statusChangedTime && GetBlockingDependencies().isEmpty();
     }    
+    
+    public List<Dependency> GetBlockingDependencies()
+    {
+        List<Dependency> list = new ArrayList<>();
+        
+        _dependencies.stream().forEach((dependency) ->
+        {
+            Light light = dependency.Light;
+            if (light.Status.isGreen() || light.Status.isOrange())
+            {
+                if(dependency.Direction != null && light instanceof BusLight && !light.Status.isOrange())
+                {
+                    if(light.Status.isGreen(dependency.Direction))
+                    {
+                        list.add(dependency);
+                    }
+                }
+                else
+                {
+                    list.add(dependency);
+                }
+            }
+        });
+        
+        return list;
+    }
 }

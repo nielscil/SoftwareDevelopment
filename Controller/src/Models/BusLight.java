@@ -14,52 +14,52 @@ import java.util.List;
  */
 public class BusLight extends Light
 {
-    private final transient List<Light> _dependenciesRight = new ArrayList<>();
-    private final transient List<Light> _dependenciesStraight = new ArrayList<>();
+    private final transient List<Dependency> _dependenciesRight = new ArrayList<>();
+    private final transient List<Dependency> _dependenciesStraight = new ArrayList<>();
+    private final transient List<Dependency> _dependenciesLeft = new ArrayList<>();
+    
     
     public BusLight(int id)
     {
         super(id);
     }
     
-    @Override
     public void addDependency(Light light, Direction direction)
     {
-        if(direction == Direction.Right && !_dependenciesRight.contains(light))
+        Dependency dependency = new Dependency(light, null);
+        if(direction == Direction.Right && !_dependenciesRight.contains(dependency))
         {
-            _dependenciesRight.add(light);
+            _dependenciesRight.add(dependency);
         }
         
-        if(direction == Direction.StraightAhead && !_dependenciesStraight.contains(light))
+        if(direction == Direction.StraightAhead && !_dependenciesStraight.contains(dependency))
         {
-            _dependenciesStraight.add(light);
+            _dependenciesStraight.add(dependency);
         }
         
-        Tuple<Light,Direction> tuple = new Tuple<>(light, null);
-        if(!_dependencies.contains(tuple))
+        if(!_dependencies.contains(dependency))
         {
-            _dependencies.add(tuple);
+            _dependencies.add(dependency);
         }
     }
     
     @Override
     public void addDependency(Light light)
     {
-        if(!_dependenciesRight.contains(light))
+        Dependency dependency = new Dependency(light, null);
+        if(!_dependenciesRight.contains(dependency))
         {
-             _dependenciesRight.add(light);
+             _dependenciesRight.add(dependency);
         }
         
-        if(!_dependenciesStraight.contains(light))
+        if(!_dependenciesStraight.contains(dependency))
         {
-            _dependenciesStraight.add(light);
+            _dependenciesStraight.add(dependency);
         }
         
-        Tuple<Light,Direction> tuple = new Tuple<>(light, null);
-        if(!_dependencies.contains(tuple))
+        if(!_dependencies.contains(dependency))
         {
-            _dependencies.add(tuple);
+            _dependencies.add(dependency);
         }
-    }
-    
+    }    
 }
