@@ -26,11 +26,12 @@ public class Controller implements Observer
     {
         try
         {
-            _provider = new ConnectionProvider("localhost", groupId, username, password);
+            _provider = new ConnectionProvider(host, groupId, username, password);
             _provider.addObserver(this);
         }
         catch(Exception e)
         {
+            System.err.println(e.toString());
         }
     }
 

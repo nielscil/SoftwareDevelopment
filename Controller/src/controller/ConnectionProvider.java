@@ -30,8 +30,8 @@ import java.util.concurrent.TimeoutException;
  */
 public class ConnectionProvider extends Observable implements Closeable, Observer
 {
-    private final String ControllerQueueName = "Controller";
-    private final String SimulatorQueueName = "Simulator";
+    private final String ControllerQueueName = "controller";
+    private final String SimulatorQueueName = "simulator";
     private final String GroupId = "9";
     
     private final ConnectionFactory _factory;
@@ -46,7 +46,7 @@ public class ConnectionProvider extends Observable implements Closeable, Observe
         _factory.setHost(host);
         if(!StringHelper.IsNullOrWhitespace(groupId))
         {
-            _factory.setVirtualHost(groupId);
+            _factory.setVirtualHost("/" + groupId);
         }
         
         if(!StringHelper.IsNullOrWhitespace(username) && !StringHelper.IsNullOrWhitespace(password))
