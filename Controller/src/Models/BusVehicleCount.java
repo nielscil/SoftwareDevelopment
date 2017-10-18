@@ -32,6 +32,21 @@ public class BusVehicleCount extends LightVehicleCount implements Cloneable
         return _priorities;
     }
     
+    public Direction getHighestDirection()
+    {
+        int val = 0;
+        Direction direction = null;
+        for(Map.Entry<Direction,Integer> entry : _priorities.entrySet())
+        {
+            if(val < entry.getValue())
+            {
+                direction = entry.getKey();
+                val = entry.getValue();
+            }
+        }
+        return direction;
+    }
+    
     @Override
     public void calculatePriorty(long currentTime)
     {
@@ -53,7 +68,7 @@ public class BusVehicleCount extends LightVehicleCount implements Cloneable
             return (int)_directionRequests.stream().filter((d) -> (direction.equals(d))).count() * 150;
         }
         return 0;
-    }
+    }    
     
     @Override
     public LightVehicleCount clone()

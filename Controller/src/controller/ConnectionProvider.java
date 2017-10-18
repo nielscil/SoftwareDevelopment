@@ -63,7 +63,7 @@ public class ConnectionProvider extends Observable implements Closeable, Observe
         try
         {
             String serialized = JsonHelper.instance().Serialize(obj);
-            //System.out.println(serialized);
+            System.out.println(serialized);
             byte[] bytes = serialized.getBytes("UTF-8");
             _simulatorChannel.basicPublish("", SimulatorQueueName, null, bytes);
         }

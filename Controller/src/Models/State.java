@@ -16,11 +16,14 @@ public enum State
     Green,
     GreenLeft,
     GreenRight,
+    GreenLeftStraight,
+    GreenRightStraight,
+    GreenLeftRight,
     GreenAll;
     
     public boolean isGreen()
     {
-        return this == Green || this == GreenAll || this == GreenLeft || this == GreenRight;
+        return this == Green || this == GreenAll || this == GreenLeft || this == GreenRight || this == GreenLeftRight || this == GreenLeftStraight || this == GreenRightStraight;
     }
     
     public boolean isGreen(Direction direction)
@@ -28,11 +31,11 @@ public enum State
         switch(direction)
         {
             case Left:
-                return this == GreenLeft || this == GreenAll;
+                return this == GreenLeft || this == GreenAll || this == GreenLeftRight || this == GreenLeftStraight;
             case Right:
-                return this == GreenRight || this == GreenAll;
+                return this == GreenRight || this == GreenAll || this == GreenLeftRight || this == GreenRightStraight;
             case StraightAhead:
-                return this == Green || this == GreenAll;
+                return this == Green || this == GreenAll || this == GreenLeftStraight || this == GreenRightStraight;
             default:
                 return false;
         }
@@ -46,5 +49,19 @@ public enum State
     public boolean isOrange()
     {
         return this == Orange;
+    }
+    
+    public static State getGreenStateByDirection(Direction direction)
+    {
+        switch(direction)
+        {
+            case Left:
+                return GreenLeft;
+            case Right:
+                return GreenRight;
+            case StraightAhead:
+                return Green;
+        }
+        return null;
     }
 }

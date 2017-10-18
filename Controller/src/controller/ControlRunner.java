@@ -60,7 +60,7 @@ public class ControlRunner implements Runnable
                 checkSpeed();
                 calculateNewTime();
                 long currentTime = getTime();
-
+                
                 setMappedVehicleCount(_controller.getLights());
             
                 List<LightVehicleCount> sortedList = new ArrayList<>(_mappedVehicleCount.values());
@@ -88,7 +88,7 @@ public class ControlRunner implements Runnable
                     {
                         if(vehicleCount.getPriorty() > 0)
                         {
-                            trySetLightToGreen(vehicleCount.getLight());
+                            trySetBusLightToGreen((BusVehicleCount)vehicleCount);
                         }
                     }
                     else if(vehicleCount instanceof TrainVehicleCount)
@@ -127,8 +127,36 @@ public class ControlRunner implements Runnable
             {
                 light.setStatus(State.Green);
             }
+            else
+            {
+                new BlockingDependenciesChecker(light).run();
+            }
+            
+        }
+    }
+    
+    private void trySetBusLightToGreen(BusVehicleCount busVehicleCount)
+    {
+        long totalPriority = busVehicleCount.getPriorty();
 
-            new BlockingDependenciesChecker(light).run();
+        if(!busVehicleCount.getLight().Status.isGreen())
+        {
+            State state = State.GreenRightStraight;
+            
+            if(busVehicleCount.getPriorities().values().stream().filter((l) -> l == totalPriority).count() == 1)
+            {
+                state = State.getGreenStateByDirection(busVehicleCount.getHighestDirection());
+            }
+            
+            if(busVehicleCount.getLight().canSetStatus(state))
+            {
+                busVehicleCount.getLight().setStatus(state);
+            }
+            else
+            {
+                new BlockingDependenciesChecker((BusLight)busVehicleCount.getLight(), state).run();
+            }
+          
         }
     }
     
