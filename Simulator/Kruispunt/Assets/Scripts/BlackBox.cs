@@ -32,4 +32,8 @@ public class BlackBox
 		_connectionProvider.Send (update);
 	}
 
+	public void Dispose()
+	{
+		_connectionProvider.Dispose ();
+	}
 }

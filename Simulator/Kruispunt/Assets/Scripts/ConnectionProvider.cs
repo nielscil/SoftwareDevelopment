@@ -98,7 +98,7 @@ public class ConnectionProvider: IDisposable
         ControllerUpdate update = JsonConvert.DeserializeObject<ControllerUpdate>(data); //TODO: you can get a speed object here too
 		if(_received != null)
           	_received.Invoke(update);
-		Debug.Log (" > received");
+		Debug.Log (data);
     }
 
 	public void Send(TrafficUpdate update)

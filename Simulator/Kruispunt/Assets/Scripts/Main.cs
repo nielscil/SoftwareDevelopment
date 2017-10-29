@@ -32,6 +32,11 @@ public class Main : MonoBehaviour
 		}
 	}
 
+	void OnDestroy()
+	{
+		_blackBox.Dispose ();
+	}
+
 	private void InitTrafficLights()
 	{
 		_trafficLights [0] = new TrafficLight (101);
