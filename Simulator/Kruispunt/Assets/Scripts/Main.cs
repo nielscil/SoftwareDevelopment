@@ -24,7 +24,7 @@ public class Main : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		ControllerUpdate update = _blackBox.GetUpdate();
+		ControllerUpdate update = _blackBox != null ? _blackBox.GetUpdate() : null;
 
 		if(update != null)
 		{

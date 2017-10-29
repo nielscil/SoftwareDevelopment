@@ -70,18 +70,25 @@ public class ConnectionProvider: IDisposable
     {
         _controllerQueue = _factory.CreateConnection();
         _controllerChannel = _controllerQueue.CreateModel();
-        _controllerChannel.QueueDeclare(ControllerQueueName, false, false, true, null);
+        _controllerChannel.QueueDeclare(ControllerQueueName, false, false, true, GetQueueArguments());
     }
 
     private void CreateSimulatorQueue()
     {
         _simulatorQueue = _factory.CreateConnection();
         _simulatorChannel = _simulatorQueue.CreateModel();
-        _simulatorChannel.QueueDeclare(SimulatorQueueName, false, false, true, null);
+        _simulatorChannel.QueueDeclare(SimulatorQueueName, false, false, true, GetQueueArguments());
 
         _eventReceiver = new EventingBasicConsumer(_simulatorChannel);
         _eventReceiver.Received += EventReceiver_Received;
         _simulatorChannel.BasicConsume(SimulatorQueueName, false, _eventReceiver);
+    }
+
+    private Dictionary<string, object> GetQueueArguments()
+    {
+        var arguments = new Dictionary<string, object>();
+        arguments.Add("x-message-ttl", 10000);
+        return arguments;
     }
 
     private void EventReceiver_Received(object sender, BasicDeliverEventArgs e)

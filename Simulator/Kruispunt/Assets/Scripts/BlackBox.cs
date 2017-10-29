@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class BlackBox
 {
-	private ConnectionProvider _connectionProvider;
-	private Stack<ControllerUpdate> _received;
+	private readonly ConnectionProvider _connectionProvider;
+	private readonly Stack<ControllerUpdate> _received;
 
 	public BlackBox (string server, string path = null, string username = null, string password = null)
 	{
 		_connectionProvider = new ConnectionProvider (server, path, username, password);
 		_connectionProvider.Received += ConnectionProvider_Received;
-		_received = new Stack<ControllerUpdate> ();
+		_received = new Stack<ControllerUpdate>();
 	}
 
 	private void ConnectionProvider_Received(ControllerUpdate update)
