@@ -95,7 +95,7 @@ public class ConnectionProvider: IDisposable
     private void EventReceiver_Received(object sender, BasicDeliverEventArgs e)
     {
 		string data = Encoding.UTF8.GetString(e.Body);
-        ControllerUpdate update = JsonConvert.DeserializeObject<ControllerUpdate>(data);//JsonUtility.FromJson<ControllerUpdate>(data);
+        ControllerUpdate update = JsonConvert.DeserializeObject<ControllerUpdate>(data); //TODO: you can get a speed object here too
 		if(_received != null)
           	_received.Invoke(update);
 		Debug.Log (" > received");

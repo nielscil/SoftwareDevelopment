@@ -36,12 +36,12 @@ hs_err_pid*
 
 ## Unity / c# ignore ##
 
-*/[Ll]ibrary/
-*/[Tt]emp/
-*/[Oo]bj/
-*/[Bb]uild/
-*/[Bb]uilds/
-*/Assets/AssetStoreTools*
+Simulator/Kruispunt/[Ll]ibrary/
+Simulator/Kruispunt/[Tt]emp/
+Simulator/Kruispunt/[Oo]bj/
+Simulator/Kruispunt/[Bb]uild/
+Simulator/Kruispunt/[Bb]uilds/
+Simulator/Kruispunt/Assets/AssetStoreTools*
 
 # Visual Studio 2015 cache directory
 /.vs/
