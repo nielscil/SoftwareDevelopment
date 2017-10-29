@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using Newtonsoft.Json;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
@@ -94,7 +95,7 @@ public class ConnectionProvider: IDisposable
     private void EventReceiver_Received(object sender, BasicDeliverEventArgs e)
     {
 		string data = Encoding.UTF8.GetString(e.Body);
-		ControllerUpdate update = JsonUtility.FromJson<ControllerUpdate>(data);
+        ControllerUpdate update = JsonConvert.DeserializeObject<ControllerUpdate>(data);//JsonUtility.FromJson<ControllerUpdate>(data);
 		if(_received != null)
           	_received.Invoke(update);
 		Debug.Log (" > received");
@@ -102,7 +103,8 @@ public class ConnectionProvider: IDisposable
 
 	public void Send(TrafficUpdate update)
     {
-		string serialized = JsonUtility.ToJson (update);
+        var wrapper = new TrafficUpdateWrapper(update);
+        string serialized = wrapper.ToJson();
         byte[] data = Encoding.UTF8.GetBytes(serialized);
         _controllerChannel.BasicPublish("", ControllerQueueName, null, data);
 		Debug.Log (" > " + serialized);

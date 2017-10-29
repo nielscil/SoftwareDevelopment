@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ControllerUpdate
 {
-	public LightUpdate[] Lights { get; set; }
+	public List<LightUpdate> Lights { get; set; }
 }
 
 public class LightUpdate
