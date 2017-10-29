@@ -29,8 +29,6 @@ public class Main : MonoBehaviour
 		if(update != null)
 		{
 			UpdateTrafficLights (update.Lights);
-			TrafficUpdate test = new TrafficUpdate (101, 0); //TODO: move test code
-			_blackBox.SendUpdate (test);
 		}
 	}
 
@@ -70,7 +68,12 @@ public class Main : MonoBehaviour
             {
                 switch (l.Id)
                 {
-                    case 101:
+                    case 101:                        
+                        if(l.Status == 2 && _trafficLights[0].State != 2)
+                        {
+                            TrafficUpdate test = new TrafficUpdate(101, 0);
+                            _blackBox.SendUpdate(test);
+                        }
                         _trafficLights[0].UpdateState(l.Status); //TODO: place test code here
                         break;
                     case 102:

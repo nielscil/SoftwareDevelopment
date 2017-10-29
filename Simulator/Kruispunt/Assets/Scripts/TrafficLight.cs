@@ -10,6 +10,14 @@ public class TrafficLight
 
 	private int _id;
 	private int _state = 0;
+    public int State
+    {
+        get
+        {
+            return _state;
+        }
+    }
+
 	[SerializeField]
 	private Stack<string> _stateLog;
 	private event StateChanged _changed;
