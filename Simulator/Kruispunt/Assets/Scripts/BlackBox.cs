@@ -16,13 +16,13 @@ public class BlackBox
 
 	private void ConnectionProvider_Received(ControllerUpdate update)
 	{
-		_received.Push (update);
+		_received.Push (update); //TODO: make this threadsafe
 	}
 
 	public ControllerUpdate GetUpdate()
 	{
 		if (_received != null && _received.Count > 0)
-			return _received.Pop ();
+			return _received.Pop (); //TODO: make this threadsafe
 		else
 			return null;
 	}
