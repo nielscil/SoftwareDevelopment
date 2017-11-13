@@ -33,7 +33,13 @@ public class TrafficLight : MonoBehaviour
 			_stateObject.SetActive (false);
 			_stateObject.transform.position = Vector3.zero;
 
-			if (newState == 1)
+			if (newState == 0)
+			{
+				_stateObject = _statePool.getRed ();
+				_stateObject.transform.position = this.transform.position;
+				_stateObject.SetActive (true);
+			}
+			else if (newState == 1)
 			{
 				_stateObject = _statePool.getYellow ();
 				_stateObject.transform.position = this.transform.position;
