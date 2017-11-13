@@ -19,7 +19,7 @@ public class Main : MonoBehaviour
 	public Dictionary<int, int> trafficLightsIDs = new Dictionary<int, int>(24);
 
 	[Header("Traffic Lanes")]
-	public TrafficLane[] trafficLanes = new TrafficLane[27];
+	public TrafficLane[] trafficLanes = new TrafficLane[26];
 
 	void Start ()
 	{
@@ -40,7 +40,6 @@ public class Main : MonoBehaviour
 
 	void InitLightIDReferences()
 	{
-		KeyValuePair<int, int> p;
 		trafficLightsIDs.Add (101,0);
 		trafficLightsIDs.Add (102,1);
 		trafficLightsIDs.Add (103,2);
@@ -69,10 +68,35 @@ public class Main : MonoBehaviour
 
 	void SpawnTraffic()
 	{
-		int lane = Random.Range (0, 26);
-		GameObject car;
+		int lane = Random.Range (0, 25);
 
+		GameObject trafficObject = null;
 
+		switch (trafficLanes [lane].type)
+		{
+		case TrafficType.car:
+			trafficObject = trafficPool.getCar ();
+			break;
+
+		case TrafficType.bus:
+			break;
+
+		case TrafficType.pedestrian:
+			break;
+
+		case TrafficType.cyclist:
+			break;
+
+		case TrafficType.train:
+				break;
+		}
+
+		if (trafficObject != null)
+		{
+			trafficObject.GetComponent<TrafficBehaviour> ().lane = trafficLanes [lane];
+			trafficObject.transform.position = trafficObject.GetComponent<TrafficBehaviour> ().lane.controllingLight.transform.position;
+			trafficObject.SetActive (true);
+		}
 	}
 
 	void MessageBroker_Received (string data)

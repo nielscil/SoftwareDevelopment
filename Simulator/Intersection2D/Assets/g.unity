@@ -152,50 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 1193220920}
   waypoints: []
---- !u!1 &84831669
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 84831671}
-  - component: {fileID: 84831670}
-  m_Layer: 0
-  m_Name: TrafficLane (601)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &84831670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 84831669}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllingLight: {fileID: 125747891}
-  waypoints: []
---- !u!4 &84831671
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 84831669}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1744692013}
-  m_RootOrder: 26
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &90244130
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,6 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 4
   controllingLight: {fileID: 1035369287}
   waypoints: []
 --- !u!1 &144991202
@@ -450,6 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 818244913}
   waypoints: []
 --- !u!1 &241731913
@@ -536,7 +497,6 @@ MonoBehaviour:
   - {fileID: 1810309355}
   - {fileID: 563074898}
   - {fileID: 144672917}
-  - {fileID: 84831670}
 --- !u!4 &241731915
 Transform:
   m_ObjectHideFlags: 0
@@ -575,7 +535,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b85b63d235879ec46a3aaa4b8d28543f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  server: 
+  server: localhost
   path: 
   username: 
   password: 
@@ -678,6 +638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 958524089}
   waypoints: []
 --- !u!1 &390921110
@@ -849,6 +810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 3
   controllingLight: {fileID: 1843924287}
   waypoints: []
 --- !u!1 &553585011
@@ -891,6 +853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 2136141281}
   waypoints: []
 --- !u!1 &563074896
@@ -933,6 +896,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 3
   controllingLight: {fileID: 345916033}
   waypoints: []
 --- !u!1 &571884713
@@ -1104,6 +1068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 2
   controllingLight: {fileID: 823223962}
   waypoints: []
 --- !u!1 &690036787
@@ -1146,6 +1111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 860972193}
   waypoints: []
 --- !u!1 &692689986
@@ -1188,6 +1154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   controllingLight: {fileID: 606961320}
   waypoints: []
 --- !u!1 &808713147
@@ -1230,6 +1197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 1245866275}
   waypoints: []
 --- !u!1 &818244911
@@ -1401,6 +1369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 3
   controllingLight: {fileID: 90244132}
   waypoints: []
 --- !u!1 &956472985
@@ -1443,6 +1412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   controllingLight: {fileID: 606961320}
   waypoints: []
 --- !u!1 &958524087
@@ -1528,6 +1498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 1193220920}
   waypoints: []
 --- !u!1 &1035369285
@@ -1779,6 +1750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 1132012968}
   waypoints: []
 --- !u!1 &1245866273
@@ -1864,6 +1836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 571884715}
   waypoints: []
 --- !u!1 &1285666145
@@ -1906,6 +1879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 2
   controllingLight: {fileID: 1414381556}
   waypoints: []
 --- !u!1 &1406796396
@@ -2043,6 +2017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 2
   controllingLight: {fileID: 436321611}
   waypoints: []
 --- !u!1 &1670004630
@@ -2128,6 +2103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 3
   controllingLight: {fileID: 144991204}
   waypoints: []
 --- !u!1 &1744692012
@@ -2181,7 +2157,6 @@ Transform:
   - {fileID: 1810309354}
   - {fileID: 563074897}
   - {fileID: 144672916}
-  - {fileID: 84831671}
   m_Father: {fileID: 241731915}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2225,6 +2200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 164557261}
   waypoints: []
 --- !u!1 &1776108504
@@ -2267,6 +2243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 3
   controllingLight: {fileID: 1670004632}
   waypoints: []
 --- !u!1 &1810309353
@@ -2309,6 +2286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 3
   controllingLight: {fileID: 485635909}
   waypoints: []
 --- !u!1 &1830887541
@@ -2351,6 +2329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 2
   controllingLight: {fileID: 621286960}
   waypoints: []
 --- !u!1 &1843924285
@@ -2436,6 +2415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 2
   controllingLight: {fileID: 390921112}
   waypoints: []
 --- !u!1 &1909601839
@@ -2478,6 +2458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 1245866275}
   waypoints: []
 --- !u!1 &1975193076
@@ -2563,6 +2544,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d05ea0bedaa458949a379fe2fbea1918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   controllingLight: {fileID: 1975193078}
   waypoints: []
 --- !u!1 &2136141279
