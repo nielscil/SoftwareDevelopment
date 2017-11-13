@@ -43,6 +43,13 @@ Simulator/Kruispunt/[Bb]uild/
 Simulator/Kruispunt/[Bb]uilds/
 Simulator/Kruispunt/Assets/AssetStoreTools*
 
+Simulator/Intersection2D/[Ll]ibrary/
+Simulator/Intersection2D/[Tt]emp/
+Simulator/Intersection2D/[Oo]bj/
+Simulator/Intersection2D/[Bb]uild/
+Simulator/Intersection2D/[Bb]uilds/
+Simulator/Intersection2D/Assets/AssetStoreTools*
+
 # Visual Studio 2015 cache directory
 /.vs/
 
