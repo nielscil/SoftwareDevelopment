@@ -702,6 +702,13 @@ MonoBehaviour:
   yellowPrefab: {fileID: 1969203910815766, guid: 3fb357298b25cd34fa257b7be8b6c16d,
     type: 2}
   redPrefab: {fileID: 1107544263511518, guid: 350f27cf4bc1d9f4ca99a7a9e42befc8, type: 2}
+  straightPrefab: {fileID: 1964513074508596, guid: 261ca5231eac3c04e805c9f6e2ac21d6,
+    type: 2}
+  leftPrefab: {fileID: 1812564358417236, guid: a1db254d9a33ad64dac9521003f281da, type: 2}
+  rightPrefab: {fileID: 1378268326625278, guid: 2baeddbaa5433ca49a53505fc89568a2,
+    type: 2}
+  straightRightPrefab: {fileID: 1193143141952008, guid: 7561021cfe1b6b2428daf2aca148b0c3,
+    type: 2}
 --- !u!1 &339144253
 GameObject:
   m_ObjectHideFlags: 0

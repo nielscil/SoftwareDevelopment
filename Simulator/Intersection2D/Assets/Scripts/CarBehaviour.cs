@@ -9,6 +9,7 @@ public class CarBehaviour : MonoBehaviour, TrafficBehaviour {
 	private bool _atTrafficLight = false;
 	private int _currentWaypoint = 0;
 	private Transform _currentWaypointHolder = null;
+	private bool _waitForOtherTraffic = false;
 
 	public float moveSpeed = 1f;
 	private float timer;
@@ -28,11 +29,15 @@ public class CarBehaviour : MonoBehaviour, TrafficBehaviour {
 
 	public void Drive()
 	{
-		timer += Time.fixedDeltaTime * moveSpeed;
+		
 		if (this.transform.position != _currentWaypointHolder.transform.position)
 		{
-			this.transform.position = Vector3.Lerp (this.transform.position, _currentWaypointHolder.position, timer);
-			this.transform.rotation = Quaternion.Lerp (this.transform.rotation, _currentWaypointHolder.rotation, timer);
+			if (!_waitForOtherTraffic)
+			{
+				timer += Time.fixedDeltaTime * moveSpeed;
+				this.transform.position = Vector3.Lerp (this.transform.position, _currentWaypointHolder.position, timer);
+				this.transform.rotation = Quaternion.Lerp (this.transform.rotation, _currentWaypointHolder.rotation, timer);
+			}
 		}
 		else
 		{
@@ -102,5 +107,17 @@ public class CarBehaviour : MonoBehaviour, TrafficBehaviour {
 		_atTrafficLight = false;
 		_currentWaypoint = 0;
 		_currentWaypointHolder = null;
+	}
+
+	void OnTriggerEnter2D(Collider2D collider)
+	{
+		if (!collider.isTrigger)
+			_waitForOtherTraffic = true;
+	}
+
+	void OnTriggerExit2D(Collider2D collider)
+	{
+        if (!collider.isTrigger)
+			_waitForOtherTraffic = false;
 	}
 }

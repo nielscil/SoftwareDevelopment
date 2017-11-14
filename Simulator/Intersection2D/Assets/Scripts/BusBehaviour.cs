@@ -10,6 +10,7 @@ public class BusBehaviour : MonoBehaviour, TrafficBehaviour
     private int _currentWaypoint = 0;
     private Transform _currentWaypointHolder = null;
 
+	private bool _waitForOtherTraffic;
     public float moveSpeed = 1f;
     private float timer;
 
@@ -38,107 +39,89 @@ public class BusBehaviour : MonoBehaviour, TrafficBehaviour
                 }
                 break;
             case 1:
-                if (!_inTrafficLightQue)
+                if (!_inTrafficLightQue )
                 {
                     lane.AddToQue();
                     _inTrafficLightQue = true;
                 }
                 break;
             case 2:
-                if (_inTrafficLightQue && lane.direction == LaneDirection.straight)
+                if (_inTrafficLightQue && lane.direction == LaneDirection.straight && !_waitForOtherTraffic)
                 {
                     lane.RemoveFromQue();
                     _inTrafficLightQue = false;
                 }
-                else
+                else if(!_inTrafficLightQue)
                 {
-                    if (!_inTrafficLightQue)
-                    {
-                        lane.AddToQue();
-                        _inTrafficLightQue = true;
-                    }
+                    lane.AddToQue();
+                    _inTrafficLightQue = true;
                 }
                 break;
             case 3:
-                if (_inTrafficLightQue && lane.direction == LaneDirection.left)
+                if (_inTrafficLightQue && lane.direction == LaneDirection.left && !_waitForOtherTraffic)
                 {
                     lane.RemoveFromQue();
                     _inTrafficLightQue = false;
                 }
-                else
+                else if (!_inTrafficLightQue)
                 {
-                    if (!_inTrafficLightQue)
-                    {
-                        lane.AddToQue();
-                        _inTrafficLightQue = true;
-                    }
+                    lane.AddToQue();
+                    _inTrafficLightQue = true;
                 }
                 break;
             case 4:
-                if (_inTrafficLightQue && lane.direction == LaneDirection.right)
+                if (_inTrafficLightQue && lane.direction == LaneDirection.right && !_waitForOtherTraffic)
                 {
                     lane.RemoveFromQue();
                     _inTrafficLightQue = false;
                 }
-                else
+                else if (!_inTrafficLightQue)
                 {
-                    if (!_inTrafficLightQue)
-                    {
-                        lane.AddToQue();
-                        _inTrafficLightQue = true;
-                    }
+                    lane.AddToQue();
+                    _inTrafficLightQue = true;
                 }
                 break;
             case 5:
-                if (_inTrafficLightQue && (lane.direction == LaneDirection.left || lane.direction == LaneDirection.right))
+                if (_inTrafficLightQue && (lane.direction == LaneDirection.left || lane.direction == LaneDirection.right) && !_waitForOtherTraffic)
                 {
                     lane.RemoveFromQue();
                     _inTrafficLightQue = false;
                 }
-                else
+                else if (!_inTrafficLightQue)
                 {
-                    if (!_inTrafficLightQue)
-                    {
-                        lane.AddToQue();
-                        _inTrafficLightQue = true;
-                    }
+                    lane.AddToQue();
+                    _inTrafficLightQue = true;
                 }
                 break;
             case 6:
-                if (_inTrafficLightQue && (lane.direction == LaneDirection.right || lane.direction == LaneDirection.straight))
+                if (_inTrafficLightQue && (lane.direction == LaneDirection.right || lane.direction == LaneDirection.straight) && !_waitForOtherTraffic)
                 {
                     lane.RemoveFromQue();
                     _inTrafficLightQue = false;
                 }
-                else
+                else if (!_inTrafficLightQue)
                 {
-                    if (!_inTrafficLightQue)
-                    {
-                        lane.AddToQue();
-                        _inTrafficLightQue = true;
-                    }
+                    lane.AddToQue();
+                    _inTrafficLightQue = true;
                 }
                 break;
             case 7:
-                if (_inTrafficLightQue && (lane.direction == LaneDirection.left || lane.direction == LaneDirection.straight))
+                if (_inTrafficLightQue && (lane.direction == LaneDirection.left || lane.direction == LaneDirection.straight) && !_waitForOtherTraffic)
                 {
                     lane.RemoveFromQue();
                     _inTrafficLightQue = false;
                 }
-                else
+                else if (!_inTrafficLightQue)
                 {
-                    if (!_inTrafficLightQue)
-                    {
-                        lane.AddToQue();
-                        _inTrafficLightQue = true;
-                    }
+                    lane.AddToQue();
+                    _inTrafficLightQue = true;
                 }
                 break;
             case 8:
                 if (_inTrafficLightQue)
                 {
-                    lane.AddToQue();
-                    _inTrafficLightQue = true;
+                    lane.RemoveFromQue();
+                    _inTrafficLightQue = false;
                 }
                 break;
         }
@@ -146,24 +129,26 @@ public class BusBehaviour : MonoBehaviour, TrafficBehaviour
 
     public void Drive()
     {
-        timer += Time.fixedDeltaTime * moveSpeed;
-        if (this.transform.position != _currentWaypointHolder.transform.position)
+        
+        if (transform.position != _currentWaypointHolder.transform.position)
         {
-            this.transform.position = Vector3.Lerp(this.transform.position, _currentWaypointHolder.position, timer);
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, _currentWaypointHolder.rotation, timer);
+			if (!_waitForOtherTraffic)
+			{
+				timer += Time.fixedDeltaTime * moveSpeed;
+				transform.position = Vector3.Lerp (transform.position, _currentWaypointHolder.position, timer);
+				transform.rotation = Quaternion.Lerp (transform.rotation, _currentWaypointHolder.rotation, timer);
+			}
         }
-        else
-        {
-            if (_atTrafficLight)
-            {
-                AtTrafficLight();
-            }
 
-            if (!_inTrafficLightQue)
-            {
-                _atTrafficLight = false;
-                GetWaypoint();
-            }
+        if (_atTrafficLight)
+        {
+            AtTrafficLight();
+        }
+
+        if (!_inTrafficLightQue)
+        {
+            _atTrafficLight = false;
+            GetWaypoint();
         }
     }
 
@@ -195,4 +180,16 @@ public class BusBehaviour : MonoBehaviour, TrafficBehaviour
         _currentWaypoint = 0;
         _currentWaypointHolder = null;
     }
+
+	void OnTriggerEnter2D(Collider2D collider)
+	{
+		if (!collider.isTrigger)
+			_waitForOtherTraffic = true;
+	}
+
+	void OnTriggerExit2D(Collider2D collider)
+	{
+		if (!collider.isTrigger)
+			_waitForOtherTraffic = false;
+	}
 }

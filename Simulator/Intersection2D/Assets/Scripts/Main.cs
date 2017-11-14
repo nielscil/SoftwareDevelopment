@@ -68,8 +68,7 @@ public class Main : MonoBehaviour
 
 	void SpawnTraffic()
 	{
-		int lane = Random.Range (12, 13);
-
+		int lane = Random.Range (12, 14);
 		GameObject trafficObject = null;
 
 		switch (trafficLanes [lane].type)

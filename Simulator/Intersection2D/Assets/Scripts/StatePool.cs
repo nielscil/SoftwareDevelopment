@@ -8,24 +8,42 @@ public class StatePool : MonoBehaviour {
 	public GameObject greenPrefab;
 	public GameObject yellowPrefab;
 	public GameObject redPrefab;
+    public GameObject straightPrefab;
+    public GameObject leftPrefab;
+    public GameObject rightPrefab;
+    public GameObject straightRightPrefab;
+
 	GameObject[] green;
 	GameObject[] yellow;
 	GameObject[] red;
+    GameObject straight;
+    GameObject right;
+    GameObject left;
+    GameObject straightRight;
 
 	void Start () {
 		green = new GameObject[numState];
 		yellow = new GameObject[numState];
 		red = new GameObject[numState];
 
-		for (int i = 0; i < numState; i++)
+        straight = Instantiate(straightPrefab, Vector3.zero, Quaternion.identity);
+        straight.SetActive(false);
+        right = Instantiate(rightPrefab, Vector3.zero, Quaternion.identity);
+        right.SetActive(false);
+        left = Instantiate(leftPrefab, Vector3.zero, Quaternion.identity);
+        left.SetActive(false);
+        straightRight = Instantiate(straightRightPrefab, Vector3.zero, Quaternion.identity);
+        straightRight.SetActive(false);
+
+        for (int i = 0; i < numState; i++)
 		{
-			green [i] = (GameObject)Instantiate (greenPrefab, Vector3.zero, Quaternion.identity);
+			green [i] = Instantiate (greenPrefab, Vector3.zero, Quaternion.identity);
 			green [i].SetActive (false);
 
-			yellow [i] = (GameObject)Instantiate (yellowPrefab, Vector3.zero, Quaternion.identity);
+			yellow [i] = Instantiate (yellowPrefab, Vector3.zero, Quaternion.identity);
 			yellow [i].SetActive (false);
 
-			red [i] = (GameObject)Instantiate (redPrefab, Vector3.zero, Quaternion.identity);
+			red [i] = Instantiate (redPrefab, Vector3.zero, Quaternion.identity);
 			red [i].SetActive (false);
 		}
 	}
@@ -65,4 +83,24 @@ public class StatePool : MonoBehaviour {
 		}
 		return null;
 	}
+
+    public GameObject GetStraight()
+    {
+        return straight;
+    }
+
+    public GameObject GetRight()
+    {
+        return right;
+    }
+
+    public GameObject GetLeft()
+    {
+        return left; 
+    }
+
+    public GameObject GetStraightRight()
+    {
+        return straightRight;
+    }
 }

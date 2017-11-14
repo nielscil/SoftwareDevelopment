@@ -46,7 +46,6 @@ public class MessageBroker : MonoBehaviour
 		string data = Encoding.UTF8.GetString(e.Body);
 		if(_received != null)
 			_received.Invoke(data);
-        Debug.Log(data);
 	}
 
 	private void CreateControllerQueue()

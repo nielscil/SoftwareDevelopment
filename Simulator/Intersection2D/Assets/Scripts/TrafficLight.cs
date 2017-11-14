@@ -49,17 +49,37 @@ public class TrafficLight : MonoBehaviour
 			}
 			else if (newState == 2)
 			{
-				_stateObject = _statePool.getGreen ();
+                if(id == 201)
+                {
+                    _stateObject = _statePool.GetStraight();
+                }
+                else
+                {
+                    _stateObject = _statePool.getGreen();
+                }
+				
 				_stateObject.transform.position = this.transform.position;
 				_stateObject.SetActive (true);
 			}
-            else
+            else if (newState == 3)
             {
-                _stateObject = _statePool.getGreen();
+                _stateObject = _statePool.GetRight();
                 _stateObject.transform.position = this.transform.position;
                 _stateObject.SetActive(true);
             }
-		}
+            else if( newState == 4)
+            {
+                _stateObject = _statePool.GetLeft();
+                _stateObject.transform.position = this.transform.position;
+                _stateObject.SetActive(true);
+            }
+            else if(newState == 6)
+            {
+                _stateObject = _statePool.GetStraightRight();
+                _stateObject.transform.position = this.transform.position;
+                _stateObject.SetActive(true);
+            }
+        }
 
 		state = newState;
 		_stateLog.Push (" > Trafficlight changed to: " + newState.ToString () + ".");
