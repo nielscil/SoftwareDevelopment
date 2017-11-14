@@ -6,13 +6,14 @@ public class TrafficLight : MonoBehaviour
 {
 	public int id;
 	public int state = 0;
-	private Stack<string> _stateLog;
 	public int trafficInQue = 0;
+    private List<int> _directionRequests;
 
 	private MessageBroker _messageBroker;
 
 	private StatePool _statePool;
 	private GameObject _stateObject;
+	private Stack<string> _stateLog;
 
 	void Start()
 	{
@@ -23,6 +24,7 @@ public class TrafficLight : MonoBehaviour
 
 		_messageBroker = this.gameObject.GetComponentInParent<MessageBroker> ();
 		_stateLog = new Stack<string> ();
+        _directionRequests = new List<int>();
 		_stateLog.Push (" > Trafficlight created.");
 	}
 
@@ -51,27 +53,61 @@ public class TrafficLight : MonoBehaviour
 				_stateObject.transform.position = this.transform.position;
 				_stateObject.SetActive (true);
 			}
+            else
+            {
+                _stateObject = _statePool.getGreen();
+                _stateObject.transform.position = this.transform.position;
+                _stateObject.SetActive(true);
+            }
 		}
 
 		state = newState;
 		_stateLog.Push (" > Trafficlight changed to: " + newState.ToString () + ".");
 	}
 
-	public void addToQue()
+	public void AddToQue()
 	{
 		trafficInQue += 1;
 		SendUpdate ();
 	}
 
-	public void removeFromQue()
+    public void AddToQue(int direction)
+    {
+        trafficInQue += 1;
+        _directionRequests.Add(direction);
+        SendUpdate();
+    }
+
+    public void RemoveFromQue()
 	{
 		trafficInQue -= 1;
 		SendUpdate ();
 	}
 
-	private void SendUpdate()
+    public void RemoveFromQue(int direcion)
+    {
+        trafficInQue -= 1;
+        _directionRequests.Remove(direcion);
+        SendUpdate();
+    }
+
+    private void SendUpdate()
 	{
-		TrafficUpdate update = new TrafficUpdate(id, trafficInQue);
+        TrafficUpdate update;
+        if (_directionRequests.Count == 0)
+        {
+            update = new TrafficUpdate(id, trafficInQue);
+        }
+        else
+        {
+            int[] directions = new int[_directionRequests.Count];
+            for(int i = 0; i < _directionRequests.Count; i++)
+            {
+                directions[i] = _directionRequests[i];
+            }
+            update = new TrafficUpdate(id, trafficInQue, directions);
+        }
+
 		_messageBroker.SendTrafficUpdate(update);
 	}	
 }

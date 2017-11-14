@@ -8,7 +8,7 @@ public class Main : MonoBehaviour
 	//private BlackBox _blackBox;
 
 	[Header("BlackBox information")]
-	[SerializeField] private MessageBroker _messageBroker;
+	public MessageBroker _messageBroker;
 	private readonly Stack<ControllerUpdate> _received = new Stack<ControllerUpdate>();
 
 	[Header("Traffic Pool")]
@@ -16,7 +16,7 @@ public class Main : MonoBehaviour
 
 	[Header("Traffic Lights")]
 	public TrafficLight[] trafficLights = new TrafficLight[24];
-	public Dictionary<int, int> trafficLightsIDs = new Dictionary<int, int>(24);
+	private Dictionary<int, int> trafficLightsIDs = new Dictionary<int, int>(24);
 
 	[Header("Traffic Lanes")]
 	public TrafficLane[] trafficLanes = new TrafficLane[26];
@@ -68,7 +68,7 @@ public class Main : MonoBehaviour
 
 	void SpawnTraffic()
 	{
-		int lane = Random.Range (0, 25);
+		int lane = Random.Range (12, 13);
 
 		GameObject trafficObject = null;
 
@@ -76,10 +76,15 @@ public class Main : MonoBehaviour
 		{
 		case TrafficType.car:
 			trafficObject = trafficPool.getCar ();
+			trafficObject.GetComponent<CarBehaviour> ().lane = trafficLanes [lane];
+			trafficObject.GetComponent<CarBehaviour> ().Start ();
 			break;
 
 		case TrafficType.bus:
-			break;
+			trafficObject = trafficPool.getBus ();
+            trafficObject.GetComponent<BusBehaviour>().lane = trafficLanes[lane];
+            trafficObject.GetComponent<BusBehaviour>().Start();
+            break;
 
 		case TrafficType.pedestrian:
 			break;
@@ -93,9 +98,7 @@ public class Main : MonoBehaviour
 
 		if (trafficObject != null)
 		{
-			trafficObject.GetComponent<TrafficBehaviour> ().lane = trafficLanes [lane];
-			trafficObject.transform.position = trafficObject.GetComponent<TrafficBehaviour> ().lane.controllingLight.transform.position;
-			trafficObject.SetActive (true);
+			
 		}
 	}
 
