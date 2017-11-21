@@ -48,7 +48,8 @@ public class JsonHelper
             
             if(jsonObj.has(SpeedTypeIdentifier))
             {
-                speed = _gson.fromJson(jsonObj, Speed.class);
+                //If we want to use speed, uncomment this below. Needs Lots of testing!!
+                //speed = _gson.fromJson(jsonObj, Speed.class); 
             }
 
         }

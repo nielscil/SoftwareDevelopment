@@ -48,6 +48,33 @@ public class ControlRunner implements Runnable
         _intersection = new Intersection();
         _intersection.addObserver(controller.getConnectionProvider());
     }
+    
+    private void calculatePrio()
+    {
+        _mappedVehicleCount.values().stream().forEach((LightVehicleCount l) ->
+        {
+            l.calculatePriorty(getTime());
+        });
+    }
+    
+    private List<LightVehicleCount> getSortedList()
+    {
+        List<LightVehicleCount> sortedList = new ArrayList<>(_mappedVehicleCount.values());
+        sortedList.sort((a,b)-> a.compareTo(b));
+        return sortedList;
+    }
+    
+    private void turnOrangeToRed()
+    {
+        long currentTime = getTime();
+        for(Light l : _intersection.getLights().stream().filter((l) -> l.Status.isOrange()).collect(Collectors.toList()))
+        {
+            if(l.canSetStatus(State.Red))
+            {
+                l.setStatus(State.Red);
+            }
+        }   
+    }
 
     @Override
     public void run()
@@ -56,59 +83,16 @@ public class ControlRunner implements Runnable
         {
             try
             {
+                setMappedVehicleCount(_controller.getLights());
+                
                 checkSpeed();
                 calculateNewTime();
-                long currentTime = getTime();
+                calculatePrio();
+
+                turnOrangeToRed();
+                checkTrain();
+                checkOthers();
                 
-                setMappedVehicleCount(_controller.getLights());
-            
-                List<LightVehicleCount> sortedList = new ArrayList<>(_mappedVehicleCount.values());
-                sortedList.stream().forEach((LightVehicleCount l) -> 
-                { 
-                    l.calculatePriorty(currentTime);
-                });
-                sortedList.sort((a,b)-> a.compareTo(b));
-        
-                //set orange lights to red when orange period is past.
-                for(Light l : _intersection.getLights().stream().filter((l) -> l.Status.isOrange()).collect(Collectors.toList()))
-                {
-                    if(currentTime - l.getStatusChangedTime() >= OrangeLightTime) //<- this is the orange period time must be 2 or 3 seconds
-                    {
-                        l.setStatus(State.Red);
-                    }
-                }       
-
-                CheckTrain();
-
-                for(LightVehicleCount vehicleCount : sortedList)
-                {
-                    
-                    if(vehicleCount instanceof BusVehicleCount)
-                    {
-                        if(vehicleCount.getPriorty() > 0)
-                        {
-                            trySetBusLightToGreen((BusVehicleCount)vehicleCount);
-                        }
-                    }
-                    else if(vehicleCount instanceof TrainVehicleCount)
-                    {
-                        if(vehicleCount.getPriorty() > 0)
-                        {
-                            trySetLightToGreen(vehicleCount.getLight());
-                        }
-                    }
-                    else if(vehicleCount instanceof CrosswayLightCount)
-                    {
-                        if(vehicleCount.getPriorty() > 0)
-                        {
-                            trySetLightToGreen(vehicleCount.getLight());
-                        }
-                    }
-                    else
-                    {
-                        trySetLightToGreen(vehicleCount.getLight());
-                    }
-                }
                 _intersection.saveChanges();
             }
             catch(Exception e)
@@ -116,6 +100,41 @@ public class ControlRunner implements Runnable
                 System.err.println(e.toString());
             }    
         }       
+    }
+    
+    private void checkOthers()
+    {
+        List<LightVehicleCount> sortedList = getSortedList();
+        
+        for(LightVehicleCount vehicleCount : sortedList)
+        {
+
+            if(vehicleCount instanceof BusVehicleCount)
+            {
+                if(vehicleCount.getPriorty() > 0)
+                {
+                    trySetBusLightToGreen((BusVehicleCount)vehicleCount);
+                }
+            }
+            else if(vehicleCount instanceof TrainVehicleCount)
+            {
+                if(vehicleCount.getPriorty() > 0)
+                {
+                    trySetLightToGreen(vehicleCount.getLight());
+                }
+            }
+            else if(vehicleCount instanceof CrosswayLightCount)
+            {
+                if(vehicleCount.getPriorty() > 0)
+                {
+                    trySetLightToGreen(vehicleCount.getLight());
+                }
+            }
+            else
+            {
+                trySetLightToGreen(vehicleCount.getLight());
+            }
+        }
     }
     
     private void trySetLightToGreen(Light light)
@@ -159,7 +178,7 @@ public class ControlRunner implements Runnable
         }
     }
     
-    private void CheckTrain()
+    private void checkTrain()
     {
         LightVehicleCount vehicleCount = _mappedVehicleCount.get(LightNumber.SouthTrainSignal_501);
         if(vehicleCount.getPriorty() > 0 && !vehicleCount.getLight().Status.isGreen())

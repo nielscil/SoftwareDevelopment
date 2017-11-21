@@ -48,7 +48,7 @@ public class Light extends Observable
     
     public void setStatus(State state)
     {
-        if(canSetStatus(state) && state != Status)
+        if(canSetStatus(state))
         {
             Status = state;
             _statusChangedTime = ControlRunner.getTime();
@@ -57,24 +57,34 @@ public class Light extends Observable
         }
     }
     
-    public boolean canSetStatus(State state)
+    public boolean canSetStatus(State newState)
     {
-        if(state.isGreen() && Status.isOrange())
+        if(newState == Status)
+        {
+            return false;
+        }
+        
+        if(newState.isGreen() && Status.isOrange())
         {
             return false;
         }
 
-        if(state.isRed() && Status.isGreen())
+        if(newState.isRed() && Status.isGreen())
         {
             return false;
         }
         
-        if(Status.isGreen() && ControlRunner.getTime() - _statusChangedTime <= 2)
+        if(Status.isGreen() && ControlRunner.getTime() - _statusChangedTime <= 5) //minimum 5 secs of green time
         {
             return false;
         }
         
-        return (!hasChanged() || Status.isRed()) && (!state.isGreen() || GetBlockingDependencies().isEmpty());
+        if(Status.isOrange() && ControlRunner.getTime() - _statusChangedTime <= 2) //minimum 2 secs of orange time
+        {
+            return false;
+        }
+        
+        return (!hasChanged() || Status.isRed()) && (!newState.isGreen() || GetBlockingDependencies().isEmpty());
     }    
     
     public List<Dependency> GetBlockingDependencies()

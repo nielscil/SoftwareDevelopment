@@ -13,6 +13,7 @@ public class SerializeableLight
 {
     public LightNumber Id;
     public State Status = State.Red;
+    public int Time = -1;
     
     public SerializeableLight(LightNumber id, State state)
     {

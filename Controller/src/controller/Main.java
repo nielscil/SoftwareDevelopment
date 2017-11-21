@@ -6,6 +6,7 @@
 package controller;
 
 import controller.Helpers.JsonHelper;
+import controller.Helpers.StringHelper;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -26,8 +27,9 @@ public class Main
         String host = args.length > 0 ? args[0] : GetUserInput("What is the host address");
         String username = args.length > 2 ? args[2] : GetUserInput("What is the username");
         String password = args.length > 3 ? args[3] : GetUserInput("What is the password");
+        boolean useGroup = !StringHelper.IsNullOrWhitespace(username) && !StringHelper.IsNullOrWhitespace(password);
         
-        new Controller(host, username, password, false); //Set to true before testing with server
+        new Controller(host, username, password, useGroup);
     }
     
     private static String GetUserInput(String text)

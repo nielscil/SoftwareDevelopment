@@ -17,14 +17,15 @@ public class BlockingDependenciesChecker
 {
     private final Light _light;
     private final long _priority;
+    private State _state;
     private final List<Light> _alreadyChecked = new ArrayList<>();
+    
     public BlockingDependenciesChecker(Light light)
     {
         _light = light;
         _priority = ControlRunner.getVehicleCount(_light.Id).getPriorty();
     }
     
-    private State _state;
     public BlockingDependenciesChecker(BusLight light, State state)
     {
         this(light);
@@ -45,26 +46,23 @@ public class BlockingDependenciesChecker
     
     private void internalRun(Light light)
     {
-        light.GetBlockingDependencies()
-                .stream()
+        _alreadyChecked.add(light);
+        CheckDependencies(light, light.GetBlockingDependencies());
+    }
+    
+    private void CheckDependencies(Light light, List<Dependency> dependencies)
+    {
+        _alreadyChecked.add(light);
+        dependencies.stream()
                 .filter((dependency) -> !(_alreadyChecked.contains(dependency.Light)))
                 .forEach((dependency) ->
         {
-            if(dependency.Light.canSetStatus(State.Orange))
+            boolean hasHigherPrio = ControlRunner.getVehicleCount(dependency.Light.Id).getPriorty() < _priority;
+            if(hasHigherPrio && dependency.Light.canSetStatus(State.Orange))
             {
-                boolean lightIsNotOrange = !dependency.Light.Status.isOrange();
-                if(ControlRunner.getVehicleCount(dependency.Light.Id).getPriorty() < _priority && lightIsNotOrange)
-                {
-                    dependency.Light.setStatus(State.Orange);
-                }
-            }
-            else
-            {
-                internalRun(dependency.Light);
-                
+                dependency.Light.setStatus(State.Orange);
             }
         });
-        _alreadyChecked.add(light);
     }
     
     private void internalRunBusLight(BusLight light)
@@ -92,27 +90,6 @@ public class BlockingDependenciesChecker
                 dependencies.addAll(light.GetBlockingDependencies(Direction.StraightAhead));
             }
         }
-        
-        dependencies
-                .stream()
-                .filter((dependency) -> !(_alreadyChecked.contains(dependency.Light)))
-                .forEach((dependency) ->
-        {
-            if(dependency.Light.canSetStatus(State.Orange))
-            {
-                boolean lightIsNotOrange = !dependency.Light.Status.isOrange();
-                if(ControlRunner.getVehicleCount(dependency.Light.Id).getPriorty() < _priority && lightIsNotOrange)
-                {
-                    dependency.Light.setStatus(State.Orange);
-                }
-            }
-            else
-            {
-                internalRun(dependency.Light);
-                
-            }
-        });
-        _alreadyChecked.add(light);
-    }   
-    
+        CheckDependencies(_light, dependencies);
+    }    
 }

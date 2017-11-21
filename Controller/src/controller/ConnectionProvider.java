@@ -84,6 +84,7 @@ public class ConnectionProvider extends Observable implements Closeable, Observe
             public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) throws IOException
             {
                 String data = new String(body,"UTF-8");
+                System.out.println(data);
                 setChanged();
                 notifyObservers(JsonHelper.instance().Parse(data));
             }
