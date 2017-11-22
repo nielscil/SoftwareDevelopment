@@ -12,23 +12,25 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import controller.Helpers.*;
 
-import controller.Helpers.StringHelper;
 import java.io.Closeable;
-
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.TimeoutException;
 
 /**
  *
  * @author Niels
  */
-public class ConnectionProvider extends Observable implements Closeable
+public class ConnectionProvider extends Observable implements Closeable, Observer
 {
-    private final String ControllerQueueName = "Controller";
-    private final String SimulatorQueueName = "Simulator";
+    private final String ControllerQueueName = "controller";
+    private final String SimulatorQueueName = "simulator";
     private final String GroupId = "9";
     
     private final ConnectionFactory _factory;
@@ -37,13 +39,13 @@ public class ConnectionProvider extends Observable implements Closeable
     private Connection _simulatorQueue;
     private Channel _simulatorChannel;
 
-    public ConnectionProvider(String host, String groupId, String username, String password) throws IOException, TimeoutException
+    public ConnectionProvider(String host, String username, String password, boolean  useGroupId) throws IOException, TimeoutException
     {
         _factory = new ConnectionFactory();
         _factory.setHost(host);
-        if(!StringHelper.IsNullOrWhitespace(groupId))
+        if(useGroupId)
         {
-            _factory.setVirtualHost(groupId);
+            _factory.setVirtualHost("/" + GroupId);
         }
         
         if(!StringHelper.IsNullOrWhitespace(username) && !StringHelper.IsNullOrWhitespace(password))
@@ -56,30 +58,35 @@ public class ConnectionProvider extends Observable implements Closeable
         CreateSimulatorQueue();
     }
     
-    public void Send(Object obj) throws UnsupportedEncodingException, IOException
+    public void Send(Object obj)
     {
-        String serialized = "Controller: " + GroupId;
-        byte[] bytes = serialized.getBytes("UTF-8");
-        _simulatorChannel.basicPublish("", SimulatorQueueName, null, bytes);
+        try
+        {
+            String serialized = JsonHelper.instance().Serialize(obj);
+            //System.out.println(serialized);
+            byte[] bytes = serialized.getBytes("UTF-8");
+            _simulatorChannel.basicPublish("", SimulatorQueueName, null, bytes);
+        }
+        catch(Exception e)
+        {
+            System.err.println(e.toString());
+        }
     }
     
     private void CreateControllerQueue() throws IOException, TimeoutException
     {
         _controllerQueue = _factory.newConnection();
         _controllerChannel = _controllerQueue.createChannel();
-        _controllerChannel.queueDeclare(ControllerQueueName, false, false, true, null);
+        _controllerChannel.queueDeclare(ControllerQueueName, false, false, true, GetTimeToLifeArgs());
         Consumer consumer = new DefaultConsumer(_controllerChannel)
         {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) throws IOException
             {
                 String data = new String(body,"UTF-8");
-                
-                Object obj  = data; //deserialize
-                
-                
+                System.out.println(data);
                 setChanged();
-                notifyObservers(obj);
+                notifyObservers(JsonHelper.instance().Parse(data));
             }
         };
         _controllerChannel.basicConsume(ControllerQueueName, false, consumer);
@@ -89,7 +96,14 @@ public class ConnectionProvider extends Observable implements Closeable
     {
         _simulatorQueue = _factory.newConnection();
         _simulatorChannel = _simulatorQueue.createChannel();
-        _simulatorChannel.queueDeclare(SimulatorQueueName, false, false, true, null);
+        _simulatorChannel.queueDeclare(SimulatorQueueName, false, false, true, GetTimeToLifeArgs());
+    }
+    
+    private Map<String, Object> GetTimeToLifeArgs()
+    {
+        Map<String, Object> args = new HashMap<>();
+        args.put("x-message-ttl", 10000);
+        return args;
     }
 
     @Override
@@ -126,6 +140,17 @@ public class ConnectionProvider extends Observable implements Closeable
         catch(Exception e)
         {
             System.err.println(e.toString());
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object arg)
+    {
+        Intersection intersection = ClassHelper.safeCast(o, Intersection.class);
+        
+        if(intersection != null)
+        {
+            Send(intersection.GetSerializable());
         }
     }
 }

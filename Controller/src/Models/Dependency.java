@@ -9,12 +9,14 @@ package Models;
  *
  * @author Niels
  */
-public enum Status
+public class Dependency
 {
-    Red,
-    Orange,
-    Green,
-    GreenLeft,
-    GreenRight,
-    GreenAll
+    public final Light Light;
+    public final Direction Direction;
+    
+    public Dependency(Light light, Direction direction)
+    {
+        Light = light;
+        Direction = direction;
+    }
 }

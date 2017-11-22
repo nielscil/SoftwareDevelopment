@@ -5,7 +5,7 @@
  */
 package Models;
 
-import java.util.EnumSet;
+import java.util.List;
 
 /**
  *
@@ -13,7 +13,7 @@ import java.util.EnumSet;
  */
 public class TrafficUpdate
 {
-    public int LightId;
+    public LightNumber LightId;
     public int Count;
-    public EnumSet<Direction> DirectionRequests;
+    public List<Direction> DirectionRequests;
 }
