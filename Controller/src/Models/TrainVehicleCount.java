@@ -19,7 +19,7 @@ public class TrainVehicleCount extends LightVehicleCount implements Cloneable
     @Override
     public void calculatePriorty(long currentTime)
     {
-        _priority = (long)(_count * 9000);
+        _priority = (long)(_count * 999999999);
     }
     
     @Override

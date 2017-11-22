@@ -34,6 +34,12 @@ public class BlockingDependenciesChecker
     
     public void run()
     {
+        //Cannot put a blocked light on green, so no need to check dependencies
+        if(_light.isBlocked())
+        {
+            return;
+        }
+        
         if(_light instanceof BusLight)
         {
             internalRunBusLight((BusLight)_light);
@@ -61,6 +67,10 @@ public class BlockingDependenciesChecker
             if(hasHigherPrio && dependency.Light.canSetStatus(State.Orange))
             {
                 dependency.Light.setStatus(State.Orange);
+            }
+            else
+            {
+                dependency.Light.block();
             }
         });
     }

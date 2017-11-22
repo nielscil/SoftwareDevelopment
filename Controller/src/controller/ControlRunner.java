@@ -157,15 +157,15 @@ public class ControlRunner implements Runnable
     {
         long totalPriority = busVehicleCount.getPriorty();
 
-        if(!busVehicleCount.getLight().Status.isGreen())
+        State state = State.GreenRightStraight;
+            
+        if(busVehicleCount.getPriorities().values().stream().filter((l) -> l == totalPriority).count() == 1)
         {
-            State state = State.GreenRightStraight;
-            
-            if(busVehicleCount.getPriorities().values().stream().filter((l) -> l == totalPriority).count() == 1)
-            {
-                state = State.getGreenStateByDirection(busVehicleCount.getHighestDirection());
-            }
-            
+            state = State.getGreenStateByDirection(busVehicleCount.getHighestDirection());
+        }
+        
+        if(busVehicleCount.getLight().Status != state)
+        {
             if(busVehicleCount.getLight().canSetStatus(state))
             {
                 busVehicleCount.getLight().setStatus(state);

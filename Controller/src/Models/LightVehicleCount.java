@@ -31,7 +31,7 @@ public class LightVehicleCount extends VehicleCount implements Comparable<LightV
         
         if(_light.Status.isGreen())
         {
-            if(timeAmount > 2)
+            if(timeAmount > 5)
             {
                 timeAmount = timeAmount * -1;
             }
@@ -41,7 +41,7 @@ public class LightVehicleCount extends VehicleCount implements Comparable<LightV
             }
         }
         
-        _priority = _count * 20 + timeAmount;
+        _priority = _count * 40 + timeAmount;
     }
     
     public long getPriorty()

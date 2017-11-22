@@ -121,6 +121,8 @@ public class StatePool : MonoBehaviour
                 return left;
             case 4:
                 return right;
+            case 6:
+                return straightRight;
         }
 
 		return null;

@@ -19,6 +19,7 @@ public class Light extends Observable
     public final LightNumber Id;
     public State Status = State.Red;
     protected int _statusChangedTime = 0;
+    protected boolean _blocked = false;
     
     protected final transient List<Dependency> _dependencies = new ArrayList<>();
     
@@ -52,6 +53,7 @@ public class Light extends Observable
         {
             Status = state;
             _statusChangedTime = ControlRunner.getTime();
+            unBlockDependecies();
             setChanged();
             notifyObservers();
         }
@@ -79,13 +81,41 @@ public class Light extends Observable
             return false;
         }
         
-        if(Status.isOrange() && ControlRunner.getTime() - _statusChangedTime <= 2) //minimum 2 secs of orange time
+        if((Status.isOrange() || Status.isRed()) && ControlRunner.getTime() - _statusChangedTime <= 2) //minimum 2 secs of orange time
+        {
+            return false;
+        }
+        
+        if(newState.isGreen() && isBlocked())
         {
             return false;
         }
         
         return (!hasChanged() || Status.isRed()) && (!newState.isGreen() || GetBlockingDependencies().isEmpty());
-    }    
+    }
+    
+    public boolean isBlocked()
+    {
+        return _blocked;
+    }
+    
+    public void block()
+    {
+        _blocked = true;
+    }
+    
+    public void unBlock()
+    {
+        _blocked = false;
+    }
+    
+    private void unBlockDependecies()
+    {
+        _dependencies.stream().filter((d) -> d.Light.isBlocked()).forEach((d) ->
+        {
+            d.Light.unBlock();
+        });
+    }
     
     public List<Dependency> GetBlockingDependencies()
     {

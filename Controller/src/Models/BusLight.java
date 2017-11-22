@@ -71,34 +71,49 @@ public class BusLight extends Light
     }   
     
     @Override
-    public boolean canSetStatus(State state)
+    public boolean canSetStatus(State newState)
     {
-        if(state.isGreen() && Status.isOrange())
+        if(newState == Status)
+        {
+            return false;
+        }
+        
+        if(newState.isGreen() && Status.isOrange())
         {
             return false;
         }
 
-        if(state.isRed() && Status.isGreen())
+        if(newState.isRed() && Status.isGreen())
         {
             return false;
         }
         
-        if(Status.isGreen() && ControlRunner.getTime() - _statusChangedTime <= 2)
+//        if(Status.isGreen() && ControlRunner.getTime() - _statusChangedTime <= 5) //minimum 5 secs of green time
+//        {
+//            return false;
+//        }
+        
+        if(/*(Status.isOrange() || Status.isRed()) &&*/ ControlRunner.getTime() - _statusChangedTime <= 2)
         {
             return false;
         }
         
-        if(state.isGreen(Direction.Right) && !GetBlockingDependencies(Direction.Right).isEmpty())
+        if(newState.isGreen(Direction.Right) && !GetBlockingDependencies(Direction.Right).isEmpty())
         {
             return false;
         }
         
-        if(state.isGreen(Direction.StraightAhead) && !GetBlockingDependencies(Direction.StraightAhead).isEmpty())
+        if(newState.isGreen(Direction.StraightAhead) && !GetBlockingDependencies(Direction.StraightAhead).isEmpty())
         {
             return false;
         }
         
-        if(state.isGreen(Direction.Left) && !GetBlockingDependencies(Direction.Left).isEmpty())
+        if(newState.isGreen(Direction.Left) && !GetBlockingDependencies(Direction.Left).isEmpty())
+        {
+            return false;
+        }
+        
+        if(newState.isGreen() && isBlocked())
         {
             return false;
         }

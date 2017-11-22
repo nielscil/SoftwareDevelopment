@@ -65,7 +65,7 @@ public class BusVehicleCount extends LightVehicleCount implements Cloneable
     {
         if(_directionRequests != null)
         {
-            return (int)_directionRequests.stream().filter((d) -> (direction.equals(d))).count() * 150;
+            return (int)_directionRequests.stream().filter((d) -> (direction.equals(d))).count() * 500;
         }
         return 0;
     }    
