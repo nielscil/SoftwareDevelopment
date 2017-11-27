@@ -121,10 +121,8 @@ public class BusLight extends Light
         return !hasChanged() || Status.isRed();
     }
     
-    public List<Dependency> GetBlockingDependencies(Direction direction)
+    public void BlockAllDependecies(Direction direction)
     {
-        List<Dependency> list = new ArrayList<>();
-        
         List<Dependency> dependencies;
         if(direction == Direction.Right)
         {
@@ -139,25 +137,27 @@ public class BusLight extends Light
             dependencies = _dependenciesStraight;
         }
         
-        dependencies.stream().forEach((dependency) ->
+        dependencies.stream().forEach((d) ->
         {
-            Light light = dependency.Light;
-            if (light.Status.isGreen() || light.Status.isOrange())
-            {
-                if(dependency.Direction != null && light instanceof BusLight && !light.Status.isOrange())
-                {
-                    if(light.Status.isGreen(dependency.Direction))
-                    {
-                        list.add(dependency);
-                    }
-                }
-                else
-                {
-                    list.add(dependency);
-                }
-            }
+            d.Light.block(this);
         });
-        
-        return list;
+    }
+    
+    public List<Dependency> GetBlockingDependencies(Direction direction)
+    {
+        List<Dependency> dependencies;
+        if(direction == Direction.Right)
+        {
+            dependencies = _dependenciesRight;
+        }
+        else if(direction == Direction.Left)
+        {
+            dependencies = _dependenciesLeft;
+        }
+        else
+        {
+            dependencies = _dependenciesStraight;
+        }
+        return InternalGetBlockingDependencies(dependencies);
     }
 }

@@ -37,7 +37,11 @@ public class BlockingDependenciesChecker
         //Cannot put a blocked light on green, so no need to check dependencies
         if(_light.isBlocked())
         {
-            return;
+            if(!_light.HasHigherPriority(_light))
+            {
+                return;
+            }
+            _light.unBlock();
         }
         
         if(_light instanceof BusLight)
@@ -52,7 +56,7 @@ public class BlockingDependenciesChecker
     
     private void internalRun(Light light)
     {
-        _alreadyChecked.add(light);
+        light.BlockAllDependecies();
         CheckDependencies(light, light.GetBlockingDependencies());
     }
     
@@ -67,10 +71,6 @@ public class BlockingDependenciesChecker
             if(hasHigherPrio && dependency.Light.canSetStatus(State.Orange))
             {
                 dependency.Light.setStatus(State.Orange);
-            }
-            else
-            {
-                dependency.Light.block();
             }
         });
     }
@@ -87,16 +87,19 @@ public class BlockingDependenciesChecker
         {
             if(_state.isGreen(Direction.Left))
             {
+                light.BlockAllDependecies(Direction.Left);
                 dependencies.addAll(light.GetBlockingDependencies(Direction.Left));
             }
 
             if(_state.isGreen(Direction.Right))
             {
+                light.BlockAllDependecies(Direction.Right);
                 dependencies.addAll(light.GetBlockingDependencies(Direction.Right));
             }
 
             if(_state.isGreen(Direction.StraightAhead))
             {
+                light.BlockAllDependecies(Direction.StraightAhead);
                 dependencies.addAll(light.GetBlockingDependencies(Direction.StraightAhead));
             }
         }

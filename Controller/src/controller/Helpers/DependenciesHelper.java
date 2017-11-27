@@ -50,8 +50,10 @@ public class DependenciesHelper
     {
         Light l = getLight(LightNumber.NorthRight_101);
         
-        setNorthWalkAndBicylceDependencies(l);
-        setWestWalkAndBicylceDependencies(l);
+        setNorthBicylceDependencies(l);
+        setNorthWalkLeftDependencies(l);
+        setWestBicylceDependencies(l);
+        setWestWalkUpDependecies(l);
         setBusDepenency(l, Direction.StraightAhead);
         l.addDependency(getLight(LightNumber.SouthLeft_107));
         l.addDependency(getLight(LightNumber.EastStraight_105));
@@ -60,7 +62,8 @@ public class DependenciesHelper
     {
         Light l = getLight(LightNumber.NorthStraight_102);
         
-        setNorthWalkAndBicylceDependencies(l);
+        setNorthBicylceDependencies(l);
+        setNorthWalkLeftDependencies(l);
         setTrainDependency(l);
         setBusDepenency(l, Direction.StraightAhead);
         
@@ -76,8 +79,10 @@ public class DependenciesHelper
     {
         Light l = getLight(LightNumber.NorthLeft_103);
         
-        setNorthWalkAndBicylceDependencies(l);
-        setEastWalkAndBicylceDependencies(l);
+        setNorthBicylceDependencies(l);
+        setNorthWalkLeftDependencies(l);
+        setEastBicylceDependencies(l);
+        setEastWalkDownDependencies(l);
         setBusDepenency(l, Direction.StraightAhead);
         
         l.addDependency(getLight(LightNumber.WestStraight_109));
@@ -97,8 +102,10 @@ public class DependenciesHelper
     {
         Light l = getLight(LightNumber.EastRight_104);
         
-        setEastWalkAndBicylceDependencies(l);
-        setNorthWalkAndBicylceDependencies(l);
+        setEastBicylceDependencies(l);
+        setEastWalkUpDependencies(l);
+        setNorthBicylceDependencies(l);
+        setNorthWalkRightDependencies(l);
         setBusDepenency(l, Direction.StraightAhead);
         setBusDepenency(l, Direction.Right);
         
@@ -110,8 +117,10 @@ public class DependenciesHelper
     {
         Light l = getLight(LightNumber.EastStraight_105);
         
-        setEastWalkAndBicylceDependencies(l);
-        setWestWalkAndBicylceDependencies(l);
+        setEastBicylceDependencies(l);
+        setEastWalkUpDependencies(l);
+        setWestBicylceDependencies(l);
+        setWestWalkUpDependecies(l);
         setBusDepenency(l, Direction.StraightAhead);
         
         l.addDependency(getLight(LightNumber.NorthRight_101));
@@ -134,8 +143,10 @@ public class DependenciesHelper
     {
         Light l = getLight(LightNumber.SouthStraightRight_106);
         
-        setEastWalkAndBicylceDependencies(l);
-        setNorthWalkAndBicylceDependencies(l);
+        setEastBicylceDependencies(l);
+        setEastWalkDownDependencies(l);
+        setNorthBicylceDependencies(l);
+        setNorthWalkRightDependencies(l);
         
         setTrainDependency(l);
         
@@ -155,7 +166,8 @@ public class DependenciesHelper
     {
         Light l = getLight(LightNumber.SouthLeft_107);
         
-        setWestWalkAndBicylceDependencies(l);
+        setWestBicylceDependencies(l);
+        setWestWalkUpDependecies(l);
         setTrainDependency(l);
         setBusDepenency(l, Direction.StraightAhead);
         
@@ -179,7 +191,8 @@ public class DependenciesHelper
     {
         Light l = getLight(LightNumber.WestRight_108);
         
-        setWestWalkAndBicylceDependencies(l);
+        setWestBicylceDependencies(l);
+        setWestWalkDownDependecies(l);
         setTrainDependency(l);
         
         l.addDependency(getLight(LightNumber.NorthStraight_102));
@@ -189,8 +202,10 @@ public class DependenciesHelper
     {
         Light l = getLight(LightNumber.WestStraight_109);
         
-        setWestWalkAndBicylceDependencies(l);
-        setEastWalkAndBicylceDependencies(l);
+        setWestBicylceDependencies(l);
+        setWestWalkDownDependecies(l);
+        setEastBicylceDependencies(l);
+        setEastWalkDownDependencies(l);
         
         l.addDependency(getLight(LightNumber.NorthStraight_102));
         l.addDependency(getLight(LightNumber.NorthLeft_103));
@@ -203,8 +218,11 @@ public class DependenciesHelper
     {
         Light l = getLight(LightNumber.WestLeft_110);
         
-        setWestWalkAndBicylceDependencies(l);
-        setNorthWalkAndBicylceDependencies(l);
+        setWestBicylceDependencies(l);
+        setWestWalkDownDependecies(l);
+        setNorthBicylceDependencies(l);
+        setNorthWalkRightDependencies(l);
+        
         setBusDepenency(l, Direction.Right);
         setBusDepenency(l, Direction.StraightAhead);
         
@@ -227,6 +245,7 @@ public class DependenciesHelper
         setEastDependencies();
         
         SetSouthTrainSignal_501();
+        SetSouthTrainSignal_502();
         SetSouthRailRoadCrossing_601();
     }
     
@@ -235,13 +254,15 @@ public class DependenciesHelper
         BusLight l = (BusLight)getLight(LightNumber.EastBus_201);
         
         //set for all dependencies
-        setEastWalkAndBicylceDependencies(l);
+        setEastBicylceDependencies(l);
+        setEastWalkUpDependencies(l);
+        
         l.addDependency(getLight(LightNumber.SouthStraightRight_106));
         l.addDependency(getLight(LightNumber.WestLeft_110));
         l.addDependency(getLight(LightNumber.EastRight_104));
         
         //set right dependencies
-        l.addDependency(getLight(LightNumber.WalkWestEast_402), Direction.Right);
+        l.addDependency(getLight(LightNumber.WalkNorthCenterRight_408), Direction.Right);
         l.addDependency(getLight(LightNumber.WalkEastWest_403), Direction.Right);
         l.addDependency(getLight(LightNumber.BicycleWestEast_302), Direction.Right);
         l.addDependency(getLight(LightNumber.BicycleEastWest_303), Direction.Right);
@@ -249,7 +270,7 @@ public class DependenciesHelper
         //set straight dependencies
         
         l.addDependency(getLight(LightNumber.WalkNorthSouthWestSide_401), Direction.StraightAhead);
-        l.addDependency(getLight(LightNumber.WalkSouthNorthWestSide_406), Direction.StraightAhead);
+        l.addDependency(getLight(LightNumber.WalkWestCenterUp_412), Direction.StraightAhead);
         l.addDependency(getLight(LightNumber.BicycleNorthSouth_301), Direction.StraightAhead);
         l.addDependency(getLight(LightNumber.BicycleSouthNorthWestSide_305), Direction.StraightAhead);
         
@@ -301,10 +322,30 @@ public class DependenciesHelper
         setForBicycleWalkerNorth(l);
         
         l = getLight(LightNumber.WalkWestEast_402);
-        setForBicycleWalkerNorth(l);
+        setForWalkerNorthLeft(l);
+        
+        l = getLight(LightNumber.WalkNorthCenterLeft_407);
+        setForWalkerNorthLeft(l);
         
         l = getLight(LightNumber.WalkEastWest_403);
-        setForBicycleWalkerNorth(l);
+        setForWalkerNorthRight(l);
+        
+        l = getLight(LightNumber.WalkNorthCenterRight_408);
+        setForWalkerNorthRight(l);
+    }
+    
+    private void setForWalkerNorthRight(Light l)
+    {
+        l.addDependency(getLight(LightNumber.SouthStraightRight_106)); 
+        l.addDependency(getLight(LightNumber.EastRight_104));        
+        l.addDependency(getLight(LightNumber.WestLeft_110));
+    }
+    
+    private void setForWalkerNorthLeft(Light l)
+    {
+        l.addDependency(getLight(LightNumber.NorthRight_101));
+        l.addDependency(getLight(LightNumber.NorthStraight_102));
+        l.addDependency(getLight(LightNumber.NorthLeft_103));
     }
     
     private void setForBicycleWalkerNorth(Light l)
@@ -328,10 +369,34 @@ public class DependenciesHelper
         setForBicycleWalkerEast(l);
         
         l = getLight(LightNumber.WalkNorthSouthEastSide_404);
-        setForBicycleWalkerEast(l);
+        setForWalkerUpEast(l);
+        
+        l = getLight(LightNumber.WalkEastCenterUp_409);
+        setForWalkerUpEast(l);
         
         l = getLight(LightNumber.WalkSouthNorthEastSide_405);
-        setForBicycleWalkerEast(l);
+        setForWalkerDownEast(l);
+        
+        l = getLight(LightNumber.WalkEastCenterDown_410);
+        setForWalkerDownEast(l);
+    }
+    
+    private void setForWalkerUpEast(Light l)
+    {
+        setBusDepenency(l, Direction.Right);
+        setBusDepenency(l, Direction.StraightAhead);
+        
+        l.addDependency(getLight(LightNumber.EastRight_104));
+        l.addDependency(getLight(LightNumber.EastStraight_105));
+    }
+    
+    private void setForWalkerDownEast(Light l)
+    {
+        l.addDependency(getLight(LightNumber.WestStraight_109));
+        
+        l.addDependency(getLight(LightNumber.SouthStraightRight_106));
+        
+        l.addDependency(getLight(LightNumber.NorthLeft_103));  
     }
     
     private void setForBicycleWalkerEast(Light l)
@@ -353,13 +418,15 @@ public class DependenciesHelper
     {
         Light l = getLight(LightNumber.TrainSignalWest_501);
         
-        l.addDependency(getLight(LightNumber.WestRight_108));
+        l.addDependency(getLight(LightNumber.SouthRailRoadCrossing_601));    
+        l.addDependency(getLight(LightNumber.TrainSignalEast_502));
+    }
+    
+    private void SetSouthTrainSignal_502()
+    {
+        Light l = getLight(LightNumber.TrainSignalEast_502);
         
-        l.addDependency(getLight(LightNumber.NorthStraight_102));
-        
-        l.addDependency(getLight(LightNumber.SouthLeft_107));
-        l.addDependency(getLight(LightNumber.SouthStraightRight_106));
-        //l.addDependency(getLight(LightNumber.SouthRailRoadCrossing_601));     
+        l.addDependency(getLight(LightNumber.SouthRailRoadCrossing_601));
     }
     
     private void SetSouthRailRoadCrossing_601()
@@ -373,26 +440,55 @@ public class DependenciesHelper
         l.addDependency(getLight(LightNumber.SouthStraightRight_106));        
     }
     
-    
-    private void setNorthWalkAndBicylceDependencies(Light l)
+    private void setNorthWalkLeftDependencies(Light l)
     {
         l.addDependency(getLight(LightNumber.WalkWestEast_402));
+        l.addDependency(getLight(LightNumber.WalkNorthCenterLeft_407));
+    }
+    
+    private void setNorthWalkRightDependencies(Light l)
+    {
         l.addDependency(getLight(LightNumber.WalkEastWest_403));
+        l.addDependency(getLight(LightNumber.WalkNorthCenterRight_408));
+    }
+    
+    private void setNorthBicylceDependencies(Light l)
+    {
         l.addDependency(getLight(LightNumber.BicycleWestEast_302));
         l.addDependency(getLight(LightNumber.BicycleEastWest_303));
     }
     
-    private void setEastWalkAndBicylceDependencies(Light l)
+    private void setEastWalkUpDependencies(Light l)
     {
         l.addDependency(getLight(LightNumber.WalkNorthSouthEastSide_404));
+        l.addDependency(getLight(LightNumber.WalkEastCenterUp_409));
+    }
+    
+    private void setEastWalkDownDependencies(Light l)
+    {
         l.addDependency(getLight(LightNumber.WalkSouthNorthEastSide_405));
+        l.addDependency(getLight(LightNumber.WalkEastCenterDown_410));
+    }
+    
+    private void setEastBicylceDependencies(Light l)
+    {
         l.addDependency(getLight(LightNumber.BicycleSouthNorthEastSide_304));
     }
     
-    private void setWestWalkAndBicylceDependencies(Light l)
+    private void setWestWalkUpDependecies(Light l)
     {
         l.addDependency(getLight(LightNumber.WalkNorthSouthWestSide_401));
+        l.addDependency(getLight(LightNumber.WalkWestCenterUp_412));
+    }
+    
+    private void setWestWalkDownDependecies(Light l)
+    {
         l.addDependency(getLight(LightNumber.WalkSouthNorthWestSide_406));
+        l.addDependency(getLight(LightNumber.WalkWestCenterDown_411));
+    }
+    
+    private void setWestBicylceDependencies(Light l)
+    {
         l.addDependency(getLight(LightNumber.BicycleNorthSouth_301));
         l.addDependency(getLight(LightNumber.BicycleSouthNorthWestSide_305));
     }

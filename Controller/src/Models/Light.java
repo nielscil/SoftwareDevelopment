@@ -20,6 +20,7 @@ public class Light extends Observable
     public State Status = State.Red;
     protected int _statusChangedTime = 0;
     protected boolean _blocked = false;
+    protected Light _blockedBy = null;
     
     protected final transient List<Dependency> _dependencies = new ArrayList<>();
     private final int _minClearanceTime;
@@ -29,21 +30,14 @@ public class Light extends Observable
         Id = LightNumber.get(id);
         _minClearanceTime = clearanceTime;
     }
-    
-    public int minClearanceTime()
-    {
-        return _minClearanceTime;
-    }
-    
-    private int _currentClearanceTime = 0;
-    public void setCurrentClearanceTime(int clearanceTime)
-    {
-        _currentClearanceTime = clearanceTime;
-    }
-    
+       
     public boolean isInClearanceTime()
     {
-        return _currentClearanceTime > ControlRunner.getTime();
+        if(Status.isRed())
+        {
+            return _statusChangedTime + _minClearanceTime > ControlRunner.getTime();
+        }
+        return false;
     }
     
     
@@ -72,7 +66,7 @@ public class Light extends Observable
         {
             Status = state;
             _statusChangedTime = ControlRunner.getTime();
-            unBlockDependecies();
+            unBlockDependencies();
             setChanged();
             notifyObservers();
         }
@@ -91,6 +85,11 @@ public class Light extends Observable
         }
 
         if(newState.isRed() && Status.isGreen())
+        {
+            return false;
+        }
+        
+        if(newState.isOrange() && !Status.isGreen())
         {
             return false;
         }
@@ -118,17 +117,24 @@ public class Light extends Observable
         return _blocked;
     }
     
-    public void block()
+    public void block(Light l)
     {
         _blocked = true;
+        _blockedBy = l;
     }
     
     public void unBlock()
     {
         _blocked = false;
+        _blockedBy = null;
     }
     
-    private void unBlockDependecies()
+    public Light blockedBy()
+    {
+        return _blockedBy;
+    }
+    
+    private void unBlockDependencies()
     {
         _dependencies.stream().filter((d) -> d.Light.isBlocked()).forEach((d) ->
         {
@@ -136,11 +142,32 @@ public class Light extends Observable
         });
     }
     
+    public void BlockAllDependecies()
+    {
+        _dependencies.stream().forEach((d)->
+        {
+            if(!d.Light.isBlocked() || HasHigherPriority(d.Light))
+            {
+                d.Light.block(this);
+            } 
+        });
+    }
+    
+    public boolean HasHigherPriority(Light l)
+    {
+        return ControlRunner.getVehicleCount(l.blockedBy().Id).getPriorty() < ControlRunner.getVehicleCount(this.Id).getPriorty();
+    }
+    
     public List<Dependency> GetBlockingDependencies()
+    {
+        return InternalGetBlockingDependencies(_dependencies);
+    }
+    
+    protected List<Dependency> InternalGetBlockingDependencies(List<Dependency> allDependencies)
     {
         List<Dependency> list = new ArrayList<>();
         
-        _dependencies.stream().forEach((dependency) ->
+        allDependencies.stream().forEach((dependency) ->
         {
             Light light = dependency.Light;
             if (light.Status.isGreen() || light.Status.isOrange() || light.isInClearanceTime())

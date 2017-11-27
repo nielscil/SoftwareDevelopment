@@ -66,28 +66,13 @@ public class ControlRunner implements Runnable
     
     private void turnOrangeToRed()
     {
-        int highestClearanceTime = Integer.MIN_VALUE;
-        List<Light> redLights = new ArrayList<>();
-        
         for(Light l : _intersection.getLights().stream().filter((l) -> l.Status.isOrange()).collect(Collectors.toList()))
         {
             if(l.canSetStatus(State.Red))
             {
                 l.setStatus(State.Red);
-                redLights.add(l);
-                
-                if(highestClearanceTime < l.minClearanceTime())
-                {
-                    highestClearanceTime = l.minClearanceTime();
-                }
             }
         }
-        final int currentClearanceTime = getTime() + highestClearanceTime;
-        
-        redLights.stream().forEach((l)->
-        {
-            l.setCurrentClearanceTime(currentClearanceTime);
-        });
     }
     
     @Override

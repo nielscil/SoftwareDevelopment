@@ -41,10 +41,10 @@ public class Intersection extends Observable implements Observer
         AddLights(200, 1, 7, BusLight.class);
         
         //bicyle traffic lights
-        AddLights(300, 5, 7);
+        AddLights(300, 5, 5);
         
         //walk traffic lights
-        AddLights(400, 12, 12);
+        AddLights(400, 12, 8);
         
         //train lights
         AddLights(500, 2, 0, TrainLight.class);
