@@ -25,18 +25,38 @@ public class CrosswayLight extends Light
         {
             state = State.Green;
         }
-        else if (state == State.Green)
-        {
-            state = State.Red;
-        }
         
         super.setStatus(state);
     }
     
     @Override
+    public boolean isInClearanceTime()
+    {
+        if(Status.isGreen())
+        {
+            return _statusChangedTime + _minClearanceTime > ControlRunner.getTime();
+        }
+        return false;
+    }
+    
+    @Override
     public boolean canSetStatus(State state)
     {
-        return ControlRunner.getTime() != _statusChangedTime;
+        if(state.isGreen() && _statusChangedTime + 20 < ControlRunner.getTime())
+        {
+            return false;
+        }
+        
+        
+        
+        return ControlRunner.getTime() != _statusChangedTime && GetBlockingDependencies().isEmpty();
     }   
     
+    public void setDependenciesToOrange()
+    {
+        _dependencies.stream().forEach((d) ->
+        {
+            d.Light.setStatus(State.Orange);
+        });
+    }
 }

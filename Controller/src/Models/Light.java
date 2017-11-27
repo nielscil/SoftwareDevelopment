@@ -23,7 +23,7 @@ public class Light extends Observable
     protected Light _blockedBy = null;
     
     protected final transient List<Dependency> _dependencies = new ArrayList<>();
-    private final int _minClearanceTime;
+    protected final int _minClearanceTime;
 
     public Light(int id, int clearanceTime)
     {
@@ -170,7 +170,18 @@ public class Light extends Observable
         allDependencies.stream().forEach((dependency) ->
         {
             Light light = dependency.Light;
-            if (light.Status.isGreen() || light.Status.isOrange() || light.isInClearanceTime())
+            
+            boolean shouldAdd;
+            if(light instanceof CrosswayLight)
+            {
+                shouldAdd = light.Status.isRed() || light.isInClearanceTime();
+            }
+            else
+            {
+                shouldAdd = light.Status.isGreen() || light.Status.isOrange() || light.isInClearanceTime();
+            }
+            
+            if (shouldAdd)
             {
                 if(dependency.Direction != null && light instanceof BusLight && (!light.Status.isOrange()))
                 {

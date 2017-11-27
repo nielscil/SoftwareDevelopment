@@ -89,7 +89,7 @@ public class ControlRunner implements Runnable
                 calculatePrio();
 
                 turnOrangeToRed();
-                //checkTrain();
+                checkTrain();
                 checkOthers();
                 
                 _intersection.saveChanges();
@@ -179,20 +179,38 @@ public class ControlRunner implements Runnable
     
     private void checkTrain()
     {
-        LightVehicleCount vehicleCount = _mappedVehicleCount.get(LightNumber.TrainSignalWest_501);
-        if(vehicleCount.getPriorty() > 0 && !vehicleCount.getLight().Status.isGreen())
+        LightVehicleCount trainWest = _mappedVehicleCount.get(LightNumber.TrainSignalWest_501);
+        LightVehicleCount trainEast = _mappedVehicleCount.get(LightNumber.TrainSignalEast_502);
+        CrosswayLight crossWay = (CrosswayLight)_intersection.getLight(LightNumber.SouthRailRoadCrossing_601);
+        
+        if(trainWest.getPriorty() > 0 || trainEast.getPriorty() > 0)
         {
-            if(vehicleCount.getLight().canSetStatus(State.Green))
+            if(!crossWay.Status.isRed())
             {
-                vehicleCount.getLight().setStatus(State.Green);
+                if(crossWay.canSetStatus(State.Red))
+                {
+                    crossWay.setStatus(State.Red);
+                }
+                else
+                {
+                    crossWay.setDependenciesToOrange();
+                }
+            }
+            else if(crossWay.getStatusChangedTime() + 17 < getTime() && trainWest.getPriorty() > 0 && trainEast.getPriorty() == 0)
+            {
+                if(!trainWest.getLight().Status.isGreen())
+                {
+                    trainWest.getLight().setStatus(State.Green);
+                }
             }
         }
-        else if(!vehicleCount.getLight().Status.isRed())
+        else if(crossWay.Status.isRed())
         {
-            if(vehicleCount.getLight().canSetStatus(State.Red))
+            if(trainWest.getLight().Status.isGreen())
             {
-                vehicleCount.getLight().setStatus(State.Red);
+                trainWest.getLight().setStatus(State.Red);
             }
+            crossWay.setStatus(State.Green);
         }
     }
     

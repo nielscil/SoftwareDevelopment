@@ -48,7 +48,7 @@ public class Intersection extends Observable implements Observer
         
         //train lights
         AddLights(500, 2, 0, TrainLight.class);
-        AddLights(600, 1, 0, CrosswayLight.class);
+        AddLights(600, 1, 12, CrosswayLight.class);
         
         //populate dependencies
         DependenciesHelper.populate(this);

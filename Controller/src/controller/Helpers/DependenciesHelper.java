@@ -336,8 +336,9 @@ public class DependenciesHelper
     
     private void setForWalkerNorthRight(Light l)
     {
+        setBusDepenency(l, Direction.Right);
         l.addDependency(getLight(LightNumber.SouthStraightRight_106)); 
-        l.addDependency(getLight(LightNumber.EastRight_104));        
+        l.addDependency(getLight(LightNumber.EastRight_104));     
         l.addDependency(getLight(LightNumber.WestLeft_110));
     }
     
@@ -500,8 +501,7 @@ public class DependenciesHelper
     
     private void setTrainDependency(Light l)
     {
-        l.addDependency(getLight(LightNumber.TrainSignalWest_501));
-        //l.addDependency(getLight(LightNumber.SouthRailRoadCrossing_601));
+        l.addDependency(getLight(LightNumber.SouthRailRoadCrossing_601));
     }
         
     private Light getLight(LightNumber lightNumber)
