@@ -82,6 +82,7 @@ public class MessageBroker : MonoBehaviour
 		byte[] data = Encoding.UTF8.GetBytes (serialized);
 		_controllerChannel.BasicPublish ("", _controllerQueueName, null, data);
 		//Debug.Log (" > " + serialized);
+        //test
 	}
 
 	void Start()
