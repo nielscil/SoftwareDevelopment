@@ -6,28 +6,39 @@ using UnityEngine;
 public class TrafficLight : MonoBehaviour
 {
     public int ID;
-	public TrafficType trafficType;
-    private int State { get; set; }
-    private int TrafficInQue { get; set; }
-    private List<int> DirectionRequests { get; set; }
+    public State[] States;
+    public Transform[] locations;
 
-    private StatePool _StatePool { get; set; }
-    private GameObject StateObject { get; set; }
-    
-    private MessageBroker _MessageBroker { get; set; }
+    private int State;
+    private int TrafficInQue;
+    private List<int> DirectionRequests;
+    private GameObject[] _currentStateObjects;
+    private MessageBroker _messageBroker;
 
     private void Start()
     {
         State = 0;
         TrafficInQue = 0;
         DirectionRequests = new List<int>();
-        _StatePool = gameObject.GetComponentInParent<StatePool>();
-        StateObject = _StatePool.GetColorStateObject(0);
-        StateObject.transform.position = transform.position;
-        StateObject.SetActive(true);
-        _MessageBroker = gameObject.GetComponentInParent<MessageBroker>();
+        _currentStateObjects = new GameObject[locations.Length];
+        SetStateObjects(0);
+        _messageBroker = gameObject.GetComponentInParent<MessageBroker>();
     }
 
+    private void SetStateObjects(int state)
+    {
+        for (int i = 0; i < locations.Length; i++)
+        {
+            if (_currentStateObjects[i] != null)
+            {
+                _currentStateObjects[i].SetActive(false);
+            }
+            
+            _currentStateObjects[i] = States[state].GetState(locations[i]);
+            _currentStateObjects[i].SetActive(true);
+        }
+    }
+    
     private void SendTrafficUpdate()
     {
         
@@ -48,7 +59,7 @@ public class TrafficLight : MonoBehaviour
 			update = new TrafficUpdate(ID, TrafficInQue, directions);
         }
 
-        _MessageBroker.SendTrafficUpdate(update);
+        _messageBroker.SendTrafficUpdate(update);
     }
 
     public void UpdateState(int newState, int time)
@@ -63,27 +74,17 @@ public class TrafficLight : MonoBehaviour
         }
     }
 
-    private void UpdateMe(int newState)
-    {
-        StateObject.SetActive(false);
-        State = newState;
-        if (trafficType != TrafficType.busses)
-        {
-            StateObject = _StatePool.GetColorStateObject(newState);
-        }
-        else
-        {
-            StateObject = _StatePool.GetDirectionStateObject(newState);
-        }
-
-        StateObject.transform.position = transform.position;
-        StateObject.SetActive(true);
-    }
-
-    IEnumerator UpdateAfter(int newstate ,int seconds)
+    private IEnumerator UpdateAfter(int newstate, int seconds)
     {
         yield return new WaitForSeconds(seconds);
         UpdateMe(newstate);
+    }
+
+    private void UpdateMe(int newState)
+    {
+        State = newState;
+
+        SetStateObjects(newState);
     }
 
     public void AddToQue()
@@ -116,4 +117,6 @@ public class TrafficLight : MonoBehaviour
     {
         return State;
     }
+
+
 }

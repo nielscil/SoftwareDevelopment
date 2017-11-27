@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 50392695571768952}
   - component: {fileID: 61038448777797724}
   - component: {fileID: 61294115515584552}
-  - component: {fileID: 114440666203390726}
+  - component: {fileID: 114752614736553912}
   m_Layer: 0
   m_Name: bus
   m_TagString: Untagged
@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1652762592375036}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -79.97115, y: -72.70537, z: 0}
+  m_LocalPosition: {x: 25.894085, y: -80.09959, z: 0}
   m_LocalScale: {x: 2.3, y: 2.3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -101,7 +101,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.029106796, y: 1.0943223}
+  m_Offset: {x: 0.029106855, y: 1.207624}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -112,9 +112,9 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.2580843, y: 0.8968351}
+  m_Size: {x: 2.2580843, y: 1.1234384}
   m_EdgeRadius: 0
---- !u!114 &114440666203390726
+--- !u!114 &114752614736553912
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73f16052ac008734b9e867601ebe3558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 20
+  movementSpeed: 13.8
   rotationSpeed: 4
 --- !u!212 &212072137697363876
 SpriteRenderer:

@@ -10,7 +10,7 @@ public class TrafficSpawner : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Lanes = gameObject.GetComponentsInChildren<Lane>();
-        traintrack = gameObject.GetComponentInChildren<TrainTrack>();
+        //traintrack = gameObject.GetComponentInChildren<TrainTrack>();
         InvokeRepeating("SpawnTraffic", 5.0f, 1.0f);
 	}
 
@@ -20,7 +20,7 @@ public class TrafficSpawner : MonoBehaviour {
 
         if(lane == 25)
         {
-            traintrack.SpawnTraffic();
+            //traintrack.SpawnTraffic();
         }
         else
         {

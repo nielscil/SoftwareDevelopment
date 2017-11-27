@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TrafficLightUpdater : MonoBehaviour
 {
-    public MessageBroker _messageBroker;
+    private MessageBroker _messageBroker;
     private readonly Stack<ControllerUpdate> _received = new Stack<ControllerUpdate>();
 
     private TrafficLight[] trafficLights;
@@ -42,29 +42,12 @@ public class TrafficLightUpdater : MonoBehaviour
 
     void InitLightIDReferences()
     {
-        trafficLightsIDs.Add(101, 0);
-        trafficLightsIDs.Add(102, 1);
-        trafficLightsIDs.Add(103, 2);
-        trafficLightsIDs.Add(104, 3);
-        trafficLightsIDs.Add(105, 4);
-        trafficLightsIDs.Add(106, 5);
-        trafficLightsIDs.Add(107, 6);
-        trafficLightsIDs.Add(108, 7);
-        trafficLightsIDs.Add(109, 8);
-        trafficLightsIDs.Add(110, 9);
-        trafficLightsIDs.Add(201, 10);
-        trafficLightsIDs.Add(301, 11);
-        trafficLightsIDs.Add(302, 12);
-        trafficLightsIDs.Add(303, 13);
-        trafficLightsIDs.Add(304, 14);
-        trafficLightsIDs.Add(305, 15);
-        trafficLightsIDs.Add(401, 16);
-        trafficLightsIDs.Add(402, 17);
-        trafficLightsIDs.Add(403, 18);
-        trafficLightsIDs.Add(404, 19);
-        trafficLightsIDs.Add(405, 20);
-        trafficLightsIDs.Add(406, 21);
-        trafficLightsIDs.Add(601, 22);
+		int count = 0;
+		foreach (TrafficLight light in trafficLights)
+		{
+			trafficLightsIDs.Add (light.ID, count);
+			count++;
+		}
     }
 
     void UpdateTrafficLights()
@@ -76,6 +59,7 @@ public class TrafficLightUpdater : MonoBehaviour
             foreach (LightUpdate l in update.Lights)
             {
                 trafficLights[trafficLightsIDs[l.Id]].UpdateState(l.Status, l.Time);
+                //Debug.Log(l.Id + ": " + l.Status);
             }
         }
     }

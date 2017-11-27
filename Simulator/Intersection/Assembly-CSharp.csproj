@@ -51,13 +51,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Communication\ControllerUpdate.cs" />
-     <Compile Include="Assets\Scripts\Communication\MessageBroker.cs" />
-     <Compile Include="Assets\Scripts\Communication\TrafficUpdate.cs" />
+     <Compile Include="Assets\Scripts\DataTransfer\ControllerUpdate.cs" />
+     <Compile Include="Assets\Scripts\DataTransfer\MessageBroker.cs" />
+     <Compile Include="Assets\Scripts\DataTransfer\TrafficUpdate.cs" />
      <Compile Include="Assets\Scripts\Intersection\Lane.cs" />
+     <Compile Include="Assets\Scripts\Intersection\State.cs" />
      <Compile Include="Assets\Scripts\Intersection\TrafficLight.cs" />
      <Compile Include="Assets\Scripts\Intersection\TrainTrack.cs" />
-     <Compile Include="Assets\Scripts\Pools\StatePool.cs" />
      <Compile Include="Assets\Scripts\Pools\TrafficPool.cs" />
      <Compile Include="Assets\Scripts\Traffic\ITrafficObject.cs" />
      <Compile Include="Assets\Scripts\Traffic\TrafficObject.cs" />
@@ -92,10 +92,10 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
  </Reference>
  <Reference Include="Newtonsoft.Json">
- <HintPath>C:/Users/kjeld/Documents/Intersection/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
+ <HintPath>C:/Users/kjeld/Documents/GitHub/SoftwareDevelopment/Simulator/Intersection/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
  </Reference>
  <Reference Include="RabbitMQ.Client">
- <HintPath>C:/Users/kjeld/Documents/Intersection/Assets/Plugins/RabbitMQ.Client.dll</HintPath>
+ <HintPath>C:/Users/kjeld/Documents/GitHub/SoftwareDevelopment/Simulator/Intersection/Assets/Plugins/RabbitMQ.Client.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Analytics">
  <HintPath>C:/Users/kjeld/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.analytics@1.0.1/UnityEngine.Analytics.dll</HintPath>

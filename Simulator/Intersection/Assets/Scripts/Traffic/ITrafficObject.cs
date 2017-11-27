@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ITrafficbject
+public interface ITrafficObject
 {
-    void UpdateInQue(bool inQue);
-    bool IsInQue();
     int GetWaypointCount();
+    bool GetInQue();
 }
