@@ -351,7 +351,7 @@ public class DependenciesHelper
     
     private void SetSouthTrainSignal_501()
     {
-        Light l = getLight(LightNumber.SouthTrainSignal_501);
+        Light l = getLight(LightNumber.TrainSignalWest_501);
         
         l.addDependency(getLight(LightNumber.WestRight_108));
         
@@ -404,7 +404,7 @@ public class DependenciesHelper
     
     private void setTrainDependency(Light l)
     {
-        l.addDependency(getLight(LightNumber.SouthTrainSignal_501));
+        l.addDependency(getLight(LightNumber.TrainSignalWest_501));
         //l.addDependency(getLight(LightNumber.SouthRailRoadCrossing_601));
     }
         

@@ -12,6 +12,7 @@ package Models;
 public enum LightNumber
 {
     //North side intersection
+//North side intersection
 
     NorthRight_101(101),
     NorthStraight_102(102),
@@ -35,7 +36,7 @@ public enum LightNumber
     SouthStraightRight_106(106),
     SouthLeft_107(107),
     
-    SouthTrainSignal_501(501),
+    TrainSignalWest_501(501),
     SouthRailRoadCrossing_601(601),
     
     BicycleSouthNorthEastSide_304(304),
@@ -50,8 +51,16 @@ public enum LightNumber
     WestLeft_110(110),
     
     BicycleWestEast_302(302),
-    WalkWestEast_402(402);
+    WalkWestEast_402(402),
     
+    //newly added lights for test case 6
+    WalkNorthCenterLeft_407(407),
+    WalkNorthCenterRight_408(408),
+    WalkEastCenterUp_409(409),
+    WalkEastCenterDown_410(410),
+    WalkWestCenterUp_412(412),
+    WalkWestCenterDown_411(411),
+    TrainSignalEast_502(502);
     private final int _value;
 
     private LightNumber(int value)

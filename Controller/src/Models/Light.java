@@ -22,11 +22,30 @@ public class Light extends Observable
     protected boolean _blocked = false;
     
     protected final transient List<Dependency> _dependencies = new ArrayList<>();
-    
-    public Light(int id)
+    private final int _minClearanceTime;
+
+    public Light(int id, int clearanceTime)
     {
         Id = LightNumber.get(id);
+        _minClearanceTime = clearanceTime;
     }
+    
+    public int minClearanceTime()
+    {
+        return _minClearanceTime;
+    }
+    
+    private int _currentClearanceTime = 0;
+    public void setCurrentClearanceTime(int clearanceTime)
+    {
+        _currentClearanceTime = clearanceTime;
+    }
+    
+    public boolean isInClearanceTime()
+    {
+        return _currentClearanceTime > ControlRunner.getTime();
+    }
+    
     
     public void addDependency(Light light)
     {
@@ -124,9 +143,9 @@ public class Light extends Observable
         _dependencies.stream().forEach((dependency) ->
         {
             Light light = dependency.Light;
-            if (light.Status.isGreen() || light.Status.isOrange())
+            if (light.Status.isGreen() || light.Status.isOrange() || light.isInClearanceTime())
             {
-                if(dependency.Direction != null && light instanceof BusLight && !light.Status.isOrange())
+                if(dependency.Direction != null && light instanceof BusLight && (!light.Status.isOrange()))
                 {
                     if(light.Status.isGreen(dependency.Direction))
                     {

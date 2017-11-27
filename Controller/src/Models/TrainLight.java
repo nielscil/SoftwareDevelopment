@@ -13,9 +13,9 @@ import controller.ControlRunner;
  */
 public class TrainLight extends Light
 {
-    public TrainLight(int id)
+    public TrainLight(int id, int clearanceTime)
     {
-        super(id);
+        super(id, clearanceTime);
     }
     
     @Override

@@ -19,7 +19,7 @@ public class SerializeableIntersection
     public SerializeableIntersection(List<Light> lights)
     {
         Lights = lights.stream()
-                .filter(l -> l.Id != LightNumber.SouthTrainSignal_501)
+                .filter(l -> l.Id != LightNumber.TrainSignalEast_502)
                 .map(obj -> new SerializeableLight(obj.Id, obj.Status))
                 .collect(Collectors.toList());
     }

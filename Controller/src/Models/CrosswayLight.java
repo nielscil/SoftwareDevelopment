@@ -13,9 +13,9 @@ import controller.ControlRunner;
  */
 public class CrosswayLight extends Light
 {
-    public CrosswayLight(int id)
+    public CrosswayLight(int id, int clearanceTime)
     {
-        super(id);
+        super(id, clearanceTime);
     }
     
     @Override

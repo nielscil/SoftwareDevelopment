@@ -35,33 +35,33 @@ public class Intersection extends Observable implements Observer
         _lightsMap = new HashMap<>();
         
         //normal traffic lights
-        AddLights(100, 10);
+        AddLights(100, 10, 5);
         
         //bus traffic light
-        AddLights(200, 1, BusLight.class);
+        AddLights(200, 1, 7, BusLight.class);
         
         //bicyle traffic lights
-        AddLights(300, 5);
+        AddLights(300, 5, 7);
         
         //walk traffic lights
-        AddLights(400, 6);
+        AddLights(400, 12, 12);
         
         //train lights
-        AddLights(500, 1, TrainLight.class);
-        AddLights(600, 1, CrosswayLight.class);
+        AddLights(500, 2, 0, TrainLight.class);
+        AddLights(600, 1, 0, CrosswayLight.class);
         
         //populate dependencies
         DependenciesHelper.populate(this);
     }
     
-    private <T extends Light> void AddLights (int IdOffset, int count, Class<T> classType)
+    private <T extends Light> void AddLights (int IdOffset, int count,int clearanceTime, Class<T> classType)
     {
         try
         {
-            Constructor<T> constructor = classType.getConstructor(new Class<?>[] { int.class });
+            Constructor<T> constructor = classType.getConstructor(new Class<?>[] { int.class, int.class });
             for(int i = 1; i <= count; i++)
             {
-                T light = constructor.newInstance(IdOffset + i);
+                T light = constructor.newInstance(IdOffset + i, clearanceTime);
                 _lights.add(light);
                 _lightsMap.put(light.Id, light);
                 light.addObserver(this);
@@ -73,9 +73,9 @@ public class Intersection extends Observable implements Observer
         }
     }
     
-    private <T extends Light> void AddLights (int IdOffset, int count)
+    private <T extends Light> void AddLights (int IdOffset, int count, int clearanceTime)
     {
-        AddLights(IdOffset,count, Light.class);
+        AddLights(IdOffset,count, clearanceTime, Light.class);
     }
             
     public Light getLight(LightNumber id)

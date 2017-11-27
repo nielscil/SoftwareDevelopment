@@ -66,16 +66,30 @@ public class ControlRunner implements Runnable
     
     private void turnOrangeToRed()
     {
-        long currentTime = getTime();
+        int highestClearanceTime = Integer.MIN_VALUE;
+        List<Light> redLights = new ArrayList<>();
+        
         for(Light l : _intersection.getLights().stream().filter((l) -> l.Status.isOrange()).collect(Collectors.toList()))
         {
             if(l.canSetStatus(State.Red))
             {
                 l.setStatus(State.Red);
+                redLights.add(l);
+                
+                if(highestClearanceTime < l.minClearanceTime())
+                {
+                    highestClearanceTime = l.minClearanceTime();
+                }
             }
-        }   
+        }
+        final int currentClearanceTime = getTime() + highestClearanceTime;
+        
+        redLights.stream().forEach((l)->
+        {
+            l.setCurrentClearanceTime(currentClearanceTime);
+        });
     }
-
+    
     @Override
     public void run()
     {
@@ -90,7 +104,7 @@ public class ControlRunner implements Runnable
                 calculatePrio();
 
                 turnOrangeToRed();
-                checkTrain();
+                //checkTrain();
                 checkOthers();
                 
                 _intersection.saveChanges();
@@ -180,7 +194,7 @@ public class ControlRunner implements Runnable
     
     private void checkTrain()
     {
-        LightVehicleCount vehicleCount = _mappedVehicleCount.get(LightNumber.SouthTrainSignal_501);
+        LightVehicleCount vehicleCount = _mappedVehicleCount.get(LightNumber.TrainSignalWest_501);
         if(vehicleCount.getPriorty() > 0 && !vehicleCount.getLight().Status.isGreen())
         {
             if(vehicleCount.getLight().canSetStatus(State.Green))

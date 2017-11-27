@@ -20,9 +20,9 @@ public class BusLight extends Light
     private final transient List<Dependency> _dependenciesLeft = new ArrayList<>();
     
     
-    public BusLight(int id)
+    public BusLight(int id, int clearanceTime)
     {
-        super(id);
+        super(id, clearanceTime);
     }
     
     @Override
