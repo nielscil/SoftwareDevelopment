@@ -105,7 +105,7 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
         if (collision.isTrigger)
         {
             TrafficLight t = collision.gameObject.GetComponent<TrafficLight>();
-            if (t != null)
+            if (t != null && transform.rotation == t.transform.rotation)
             {
                 if (!inQue && !Continue(t.GetState()))
                 {
