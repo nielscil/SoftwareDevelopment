@@ -10,6 +10,7 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
     public bool Stop { get; set; }
 
     private bool inQue = false;
+    private bool _atTrafficLight = false;
     private Direction _direction { get; set; }
     private TrafficType _trafficType { get; set; }
     private TrafficLight _trafficlightInQue { get; set; }
@@ -26,7 +27,12 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
     {
         if(_currentWaypoint != null)
         {
-            if (!Stop)
+            if (_atTrafficLight)
+            {
+                _atTrafficLight = !Continue(_trafficlightInQue.GetState());
+            }
+
+            if (!Stop && !_atTrafficLight)
             {
                 if (transform.position != _currentWaypoint.position)
                 {
@@ -74,6 +80,25 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
         return false;
     }
 
+    private void CheckTrafficLight()
+    {
+        if (_trafficlightInQue != null)
+        {
+            if (!Continue(_trafficlightInQue.GetState()))
+            {
+                Stop = true;
+                if (_trafficType == TrafficType.busses)
+                {
+                    inQue = true;
+                }
+                else
+                {
+                    inQue = true;
+                }
+            }
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // trafficlight
@@ -84,7 +109,7 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
             {
                 if (!inQue && !Continue(t.GetState()))
                 {
-                    Stop = true;
+                    _atTrafficLight = true;
                     _trafficlightInQue = t;
                     if (_trafficType == TrafficType.busses)
                     {
@@ -136,7 +161,6 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
                 TrafficLight t = collision.gameObject.GetComponent<TrafficLight>();
                 if (t != null)
                 {
-                    Stop = false;
                     if (_trafficType == TrafficType.busses)
                     {
                         inQue = false;
