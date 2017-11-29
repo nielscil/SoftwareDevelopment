@@ -68,6 +68,11 @@ public class ControlRunner implements Runnable
     {
         for(Light l : _intersection.getLights().stream().filter((l) -> l.Status.isOrange()).collect(Collectors.toList()))
         {
+            if(l instanceof CrosswayLight || l instanceof TrainLight)
+            {
+                return;
+            }
+            
             if(l.canSetStatus(State.Red))
             {
                 l.setStatus(State.Red);
@@ -107,7 +112,7 @@ public class ControlRunner implements Runnable
         
         for(LightVehicleCount vehicleCount : sortedList)
         {
-
+            boolean isTrainStuff = vehicleCount instanceof CrosswayLightCount || vehicleCount instanceof TrainVehicleCount;
             if(vehicleCount instanceof BusVehicleCount)
             {
                 if(vehicleCount.getPriorty() > 0)
@@ -115,21 +120,7 @@ public class ControlRunner implements Runnable
                     trySetBusLightToGreen((BusVehicleCount)vehicleCount);
                 }
             }
-            else if(vehicleCount instanceof TrainVehicleCount)
-            {
-                if(vehicleCount.getPriorty() > 0)
-                {
-                    trySetLightToGreen(vehicleCount.getLight());
-                }
-            }
-            else if(vehicleCount instanceof CrosswayLightCount)
-            {
-                if(vehicleCount.getPriorty() > 0)
-                {
-                    trySetLightToGreen(vehicleCount.getLight());
-                }
-            }
-            else
+            else if(!isTrainStuff)
             {
                 trySetLightToGreen(vehicleCount.getLight());
             }
@@ -189,6 +180,7 @@ public class ControlRunner implements Runnable
             {
                 if(crossWay.canSetStatus(State.Red))
                 {
+                    System.out.println(getTime() + ": Setting 601 to Red");
                     crossWay.setStatus(State.Red);
                 }
                 else
@@ -200,6 +192,7 @@ public class ControlRunner implements Runnable
             {
                 if(!trainWest.getLight().Status.isGreen())
                 {
+                    System.out.println(getTime() + ": Setting 501 to Green");
                     trainWest.getLight().setStatus(State.Green);
                 }
             }
@@ -208,9 +201,11 @@ public class ControlRunner implements Runnable
         {
             if(trainWest.getLight().Status.isGreen())
             {
+                System.out.println(getTime() + ": Setting 501 to Red");
                 trainWest.getLight().setStatus(State.Red);
             }
             crossWay.setStatus(State.Green);
+            System.out.println(getTime() + ": Setting 601 to Green");
         }
     }
     

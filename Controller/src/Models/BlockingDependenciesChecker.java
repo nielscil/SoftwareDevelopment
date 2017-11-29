@@ -68,7 +68,7 @@ public class BlockingDependenciesChecker
                 .forEach((dependency) ->
         {
             boolean hasHigherPrio = ControlRunner.getVehicleCount(dependency.Light.Id).getPriorty() < _priority;
-            if(hasHigherPrio && dependency.Light.canSetStatus(State.Orange))
+            if(hasHigherPrio && dependency.Light.canSetStatus(State.Orange) && !(dependency.Light instanceof CrosswayLight))
             {
                 dependency.Light.setStatus(State.Orange);
             }

@@ -16,17 +16,7 @@ public class CrosswayLight extends Light
     public CrosswayLight(int id, int clearanceTime)
     {
         super(id, clearanceTime);
-    }
-    
-    @Override
-    public void setStatus(State state)
-    {
-        if(state == State.Orange)
-        {
-            state = State.Green;
-        }
-        
-        super.setStatus(state);
+        Status = State.Green;
     }
     
     @Override
@@ -46,8 +36,6 @@ public class CrosswayLight extends Light
         {
             return false;
         }
-        
-        
         
         return ControlRunner.getTime() != _statusChangedTime && GetBlockingDependencies().isEmpty();
     }   
