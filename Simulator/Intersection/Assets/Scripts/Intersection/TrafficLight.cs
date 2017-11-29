@@ -64,7 +64,8 @@ public class TrafficLight : MonoBehaviour
 
     public void UpdateState(int newState, int time)
     {
-        SetStateObjects(1);
+        if(ID == 601)
+            SetStateObjects(1);
         time = 12;
         StartCoroutine(UpdateAfter(newState, time));
     }
