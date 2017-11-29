@@ -7,13 +7,13 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
     public float movementSpeed;
     public float rotationSpeed;
 
-    public bool Stop { get; set; }
+    public bool Stop = false;
 
-    private bool inQue = false;
-    private bool _atTrafficLight = false;
-    private Direction _direction { get; set; }
-    private TrafficType _trafficType { get; set; }
-    private TrafficLight _trafficlightInQue { get; set; }
+    public bool inQue = false;
+    public bool _atTrafficLight = false;
+    public Direction _direction { get; set; }
+    public TrafficType _trafficType { get; set; }
+    public TrafficLight _trafficlightInQue { get; set; }
     private Lane _lane { get; set; }
     private int _waypointCount = 0;
     private Transform _currentWaypoint = null;
@@ -25,11 +25,23 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
 
     private void FollowWaypoints()
     {
-        if(_currentWaypoint != null)
+        if(_currentWaypoint != null )
         {
-            if (_atTrafficLight && _trafficlightInQue != null)
+            
+            if (_atTrafficLight && Continue(_trafficlightInQue.GetState()) )
             {
-                _atTrafficLight = !Continue(_trafficlightInQue.GetState());
+                if (_trafficType == TrafficType.busses)
+                {
+                    _trafficlightInQue.RemoveFromQue((int)_direction);
+                }
+                else
+                {
+                    _trafficlightInQue.RemoveFromQue();
+                }
+
+                inQue = false;
+                _atTrafficLight = false;
+                _trafficlightInQue = null;
             }
 
             if (!Stop && !_atTrafficLight)
@@ -82,53 +94,52 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // trafficlight
-        if (collision.isTrigger)
+        if (collision.GetComponent<TrafficLight>() != null && collision.gameObject.transform.rotation == transform.rotation)
         {
-            TrafficLight t = collision.gameObject.GetComponent<TrafficLight>();
-            if (t != null && transform.rotation == t.transform.rotation)
+            _trafficlightInQue = collision.GetComponent<TrafficLight>();
+            _atTrafficLight = true;
+            if (!inQue)
             {
-                _atTrafficLight = true;
-                _trafficlightInQue = t;
-                if (!inQue && !Continue(t.GetState()))
+                if (!Continue(_trafficlightInQue.GetState()))
                 {
                     if (_trafficType == TrafficType.busses)
                     {
                         inQue = true;
-                        t.AddToQue((int)_direction);
+                        _trafficlightInQue.AddToQue((int)_direction);
                     }
                     else
                     {
                         inQue = true;
-                        t.AddToQue();
+                        _trafficlightInQue.AddToQue();
                     }
+                }                
+            }
+            else
+            {
+                if (!Continue(_trafficlightInQue.GetState()))
+                {
+                    _atTrafficLight = true;
                 }
             }
         }
-        // traffic object
-        else
+        else if (collision.GetComponent<TrafficObject>() != null && !collision.isTrigger)
         {
-            TrafficObject t = collision.gameObject.GetComponent<TrafficObject>();
-            if(t != null)
+            Stop = true;
+            if (collision.GetComponent<TrafficObject>().inQue)
             {
-                Stop = true;
-
-                if (t.GetInQue())
+                _trafficlightInQue = collision.GetComponent<TrafficObject>()._trafficlightInQue;
+                if (!inQue)
                 {
-                    _trafficlightInQue = t._trafficlightInQue;
-
                     if (_trafficType == TrafficType.busses)
                     {
-                        inQue = true;
-                        if (_trafficlightInQue != null)
-                            _trafficlightInQue.AddToQue((int)_direction);
+                        _trafficlightInQue.AddToQue((int)_direction);
                     }
                     else
                     {
-                        inQue = true;
-                        if(_trafficlightInQue != null)
-                            _trafficlightInQue.AddToQue();
+                        _trafficlightInQue.AddToQue();
                     }
+
+                    inQue = true;
                 }
             }
         }
@@ -136,46 +147,18 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        // trafficlight
-        if (collision.isTrigger)
+        if (collision.GetComponent<TrafficObject>() != null)
         {
-            if (inQue)
-            {
-                TrafficLight t = collision.gameObject.GetComponent<TrafficLight>();
-                if (t != null)
-                {
-                    _atTrafficLight = false;
-                    if (_trafficType == TrafficType.busses)
-                    {
-                        inQue = false;
-                        t.RemoveFromQue((int)_direction);
-                    }
-                    else
-                    {
-                        inQue = false;
-                        t.RemoveFromQue();
-                    }
-                }
-                _trafficlightInQue = null;
-            }
-        }
-        // traffic object
-        else
-        {
-            TrafficObject t = collision.gameObject.GetComponent<TrafficObject>();
-            if (t != null)
-            {
-                Stop = false;
-            }
+            Stop = false;
         }
     }
 
     private void DisposeMe()
     {
-        Stop = false;
         _lane = null;
         _waypointCount = 0;
         _currentWaypoint = null;
+        _atTrafficLight = false;
         inQue = false;
         Stop = false;
         gameObject.SetActive(false);

@@ -58,6 +58,10 @@ public class TrafficLightUpdater : MonoBehaviour
         {
             foreach (LightUpdate l in update.Lights)
             {
+                if(l.Id == 412)
+                {
+                   
+                }
                 trafficLights[trafficLightsIDs[l.Id]].UpdateState(l.Status, l.Time);
                 //Debug.Log(l.Id + ": " + l.Status);
             }

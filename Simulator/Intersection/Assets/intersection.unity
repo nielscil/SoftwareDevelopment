@@ -583,6 +583,8 @@ MonoBehaviour:
   - {fileID: 1128958967}
   trafficlight: {fileID: 225479290}
   spawnTime: 0
+  trainPrefab: {fileID: 1267701213366756, guid: 3c9aa2fc8b68962479e81eeb94937dc0,
+    type: 2}
 --- !u!1 &87987081
 GameObject:
   m_ObjectHideFlags: 0
@@ -1863,6 +1865,8 @@ MonoBehaviour:
   - {fileID: 63124747}
   trafficlight: {fileID: 972560611}
   spawnTime: 20
+  trainPrefab: {fileID: 1267701213366756, guid: 3c9aa2fc8b68962479e81eeb94937dc0,
+    type: 2}
 --- !u!1 &348597004
 GameObject:
   m_ObjectHideFlags: 0
@@ -4608,7 +4612,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 805638334}
   m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
-  m_LocalPosition: {x: 0, y: -128, z: 0}
+  m_LocalPosition: {x: 0, y: -130, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2038316658}

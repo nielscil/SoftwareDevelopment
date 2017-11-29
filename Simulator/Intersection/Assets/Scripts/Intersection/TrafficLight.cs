@@ -17,11 +17,21 @@ public class TrafficLight : MonoBehaviour
 
     private void Start()
     {
-        State = 0;
+        
+        
         TrafficInQue = 0;
         DirectionRequests = new List<int>();
         _currentStateObjects = new GameObject[locations.Length];
-        SetStateObjects(0);
+        if (ID == 601)
+        {
+            State = 2;
+            SetStateObjects(2);
+        }
+        else
+        {
+            State = 0;
+            SetStateObjects(0);
+        }
         _messageBroker = gameObject.GetComponentInParent<MessageBroker>();
     }
 
@@ -64,9 +74,16 @@ public class TrafficLight : MonoBehaviour
 
     public void UpdateState(int newState, int time)
     {
+        if(State == newState)
+        {
+            return;
+        }
         if(ID == 601)
+        {
             SetStateObjects(1);
-        time = 12;
+            time = 12;
+        }
+            
         StartCoroutine(UpdateAfter(newState, time));
     }
 

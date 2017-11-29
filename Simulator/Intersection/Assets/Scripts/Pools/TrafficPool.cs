@@ -48,12 +48,6 @@ public class TrafficPool : MonoBehaviour
 
             _cyclists[i] = Instantiate(CyclistPrefab, Vector3.zero, Quaternion.identity);
             _cyclists[i].SetActive(false);
-
-            if (i < _numTrains)
-            {
-                _trains[i] = Instantiate(TrainPrefab, Vector3.zero, Quaternion.identity);
-                _trains[i].SetActive(false);
-            }
         }
     }
 
@@ -109,17 +103,5 @@ public class TrafficPool : MonoBehaviour
 
         return null;
     }
-
-    public GameObject GetTrain()
-    {
-        for (int i = 0; i < _numTrains; i++)
-        {
-            if (!_trains[i].activeSelf)
-            {
-                return _trains[i];
-            }
-        }
-
-        return null;
-    }
+    
 }

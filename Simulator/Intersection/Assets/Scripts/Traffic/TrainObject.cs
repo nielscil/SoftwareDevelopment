@@ -110,14 +110,7 @@ public class TrainObject : MonoBehaviour, ITrafficObject
 
     private void DisposeMe()
     {
-        Stop = false;
         _track.RemoveFromQue();
-        _track = null;
-        _waypointCount = 0;
-        _currentWaypoint = null;
-        inQue = false;
-        Stop = false;
-        gameObject.SetActive(false);
     }
 
     private Transform GetNextWaypoint()

@@ -32,7 +32,7 @@ public class CrosswayLight extends Light
     @Override
     public boolean canSetStatus(State state)
     {
-        if(state.isGreen() && _statusChangedTime + 20 < ControlRunner.getTime())
+        if(state.isGreen() && _statusChangedTime + 20 > ControlRunner.getTime())
         {
             return false;
         }
