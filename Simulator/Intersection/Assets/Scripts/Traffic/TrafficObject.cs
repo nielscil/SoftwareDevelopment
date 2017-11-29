@@ -27,7 +27,7 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
     {
         if(_currentWaypoint != null)
         {
-            if (_atTrafficLight)
+            if (_atTrafficLight && _trafficlightInQue != null)
             {
                 _atTrafficLight = !Continue(_trafficlightInQue.GetState());
             }
@@ -80,25 +80,6 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
         return false;
     }
 
-    private void CheckTrafficLight()
-    {
-        if (_trafficlightInQue != null)
-        {
-            if (!Continue(_trafficlightInQue.GetState()))
-            {
-                Stop = true;
-                if (_trafficType == TrafficType.busses)
-                {
-                    inQue = true;
-                }
-                else
-                {
-                    inQue = true;
-                }
-            }
-        }
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // trafficlight
@@ -107,10 +88,10 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
             TrafficLight t = collision.gameObject.GetComponent<TrafficLight>();
             if (t != null && transform.rotation == t.transform.rotation)
             {
+                _atTrafficLight = true;
+                _trafficlightInQue = t;
                 if (!inQue && !Continue(t.GetState()))
                 {
-                    _atTrafficLight = true;
-                    _trafficlightInQue = t;
                     if (_trafficType == TrafficType.busses)
                     {
                         inQue = true;
@@ -139,12 +120,14 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
                     if (_trafficType == TrafficType.busses)
                     {
                         inQue = true;
-                        _trafficlightInQue.AddToQue((int)_direction);
+                        if (_trafficlightInQue != null)
+                            _trafficlightInQue.AddToQue((int)_direction);
                     }
                     else
                     {
                         inQue = true;
-                        _trafficlightInQue.AddToQue();
+                        if(_trafficlightInQue != null)
+                            _trafficlightInQue.AddToQue();
                     }
                 }
             }
@@ -161,6 +144,7 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
                 TrafficLight t = collision.gameObject.GetComponent<TrafficLight>();
                 if (t != null)
                 {
+                    _atTrafficLight = false;
                     if (_trafficType == TrafficType.busses)
                     {
                         inQue = false;

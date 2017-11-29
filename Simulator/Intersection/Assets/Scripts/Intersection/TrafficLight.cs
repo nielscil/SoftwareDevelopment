@@ -64,14 +64,9 @@ public class TrafficLight : MonoBehaviour
 
     public void UpdateState(int newState, int time)
     {
-        if(!(time <= 0))
-        {
-            StartCoroutine(UpdateAfter(newState, time));
-        }
-        else
-        {
-            UpdateMe(newState);
-        }
+        SetStateObjects(1);
+        time = 12;
+        StartCoroutine(UpdateAfter(newState, time));
     }
 
     private IEnumerator UpdateAfter(int newstate, int seconds)

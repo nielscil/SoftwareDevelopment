@@ -543,6 +543,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 85103388}
+  - component: {fileID: 85103389}
   m_Layer: 0
   m_Name: 501
   m_TagString: Untagged
@@ -565,6 +566,23 @@ Transform:
   m_Father: {fileID: 660870218}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &85103389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 85103387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 889aab1382a086e4e9f02569a0580d7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypoints:
+  - {fileID: 1988716959}
+  - {fileID: 225479289}
+  - {fileID: 1128958967}
+  trafficlight: {fileID: 225479290}
+  spawnTime: 0
 --- !u!1 &87987081
 GameObject:
   m_ObjectHideFlags: 0
@@ -1364,9 +1382,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 501
   States:
-  - {fileID: 2031689072}
-  - {fileID: 554793753}
-  - {fileID: 512754140}
+  - {fileID: 1314372027}
+  - {fileID: 1321089735}
+  - {fileID: 1321609415}
   locations:
   - {fileID: 225479289}
 --- !u!61 &225479291
@@ -1492,7 +1510,7 @@ Transform:
   - {fileID: 650768246}
   - {fileID: 734075126}
   m_Father: {fileID: 1735295477}
-  m_RootOrder: 3
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &266612285
 GameObject:
@@ -1803,6 +1821,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 297784781}
+  - component: {fileID: 297784782}
   m_Layer: 0
   m_Name: 502
   m_TagString: Untagged
@@ -1825,6 +1844,25 @@ Transform:
   m_Father: {fileID: 660870218}
   m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &297784782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 297784780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 889aab1382a086e4e9f02569a0580d7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypoints:
+  - {fileID: 972560610}
+  - {fileID: 587793136}
+  - {fileID: 1764850563}
+  - {fileID: 1262499934}
+  - {fileID: 63124747}
+  trafficlight: {fileID: 972560611}
+  spawnTime: 20
 --- !u!1 &348597004
 GameObject:
   m_ObjectHideFlags: 0
@@ -3172,7 +3210,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 572352384}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -52, z: 0}
+  m_LocalPosition: {x: 0, y: -50, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 899845444}
@@ -5110,7 +5148,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 904020418}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: 0, y: -128, z: 0}
+  m_LocalPosition: {x: 0, y: -130, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1092208627}
@@ -7330,6 +7368,50 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!1 &1314372026
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1314372028}
+  - component: {fileID: 1314372027}
+  m_Layer: 0
+  m_Name: trainRed
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1314372027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1314372026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f21a7bb0832bd40a22b43c9ddbd554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 0
+  StatePrefab: {fileID: 1660665894832054, guid: a5dd8cbe862441a4a9a494101679909d,
+    type: 2}
+  InstantiateNumber: 2
+--- !u!4 &1314372028
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1314372026}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1735295477}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1316144728
 GameObject:
   m_ObjectHideFlags: 0
@@ -7476,7 +7558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Lanes: []
-  traintrack: {fileID: 0}
+  traintrack: []
 --- !u!114 &1318569890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7496,6 +7578,94 @@ MonoBehaviour:
     type: 2}
   TrainPrefab: {fileID: 1267701213366756, guid: 3c9aa2fc8b68962479e81eeb94937dc0,
     type: 2}
+--- !u!1 &1321089734
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1321089736}
+  - component: {fileID: 1321089735}
+  m_Layer: 0
+  m_Name: trainYelllow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1321089735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1321089734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f21a7bb0832bd40a22b43c9ddbd554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 1
+  StatePrefab: {fileID: 1102716809374210, guid: 43d0d688ea828364fabd6af2d890a9c9,
+    type: 2}
+  InstantiateNumber: 2
+--- !u!4 &1321089736
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1321089734}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1735295477}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1321609414
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1321609416}
+  - component: {fileID: 1321609415}
+  m_Layer: 0
+  m_Name: trainGreen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1321609415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1321609414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f21a7bb0832bd40a22b43c9ddbd554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 2
+  StatePrefab: {fileID: 1709192983838278, guid: f1cd651a28da5934ba0222716acd695b,
+    type: 2}
+  InstantiateNumber: 2
+--- !u!4 &1321609416
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1321609414}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1735295477}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1322416633
 GameObject:
   m_ObjectHideFlags: 0
@@ -8714,7 +8884,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1543101423}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -32, z: 0}
+  m_LocalPosition: {x: 0, y: -30, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1680241995}
@@ -9648,6 +9818,9 @@ Transform:
   - {fileID: 2031689073}
   - {fileID: 554793754}
   - {fileID: 512754141}
+  - {fileID: 1314372028}
+  - {fileID: 1321089736}
+  - {fileID: 1321609416}
   - {fileID: 238384385}
   m_Father: {fileID: 1318569886}
   m_RootOrder: 0

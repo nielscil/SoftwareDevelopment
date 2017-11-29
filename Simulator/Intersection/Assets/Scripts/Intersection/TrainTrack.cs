@@ -5,107 +5,49 @@ using UnityEngine;
 
 public class TrainTrack : MonoBehaviour
 {
-    public Transform[] WaypointsStationOut;
-    public Transform[] WaypointsStationIn;
-    public Dictionary<int, Transform[]> waypoints;
-
-    private GameObject trainIn;
-    private GameObject trainOut;
-
-    private TrafficLight _TrafficLight { get; set; }
+    public Transform[] waypoints;
+    public TrafficLight trafficlight;
+    public float spawnTime;
+    
     private TrafficPool _TrafficPool { get; set; }
 
     private void Start()
     {
-        _TrafficLight = gameObject.GetComponentInParent<TrafficLight>();
         _TrafficPool = gameObject.GetComponentInParent<TrafficPool>();
-        waypoints = new Dictionary<int, Transform[]>(2)
-        {
-            { 0, WaypointsStationIn },
-            { 1, WaypointsStationOut }
-        };
     }
 
     public void SpawnTraffic()
     {
-        if (trainIn != null && !trainIn.activeSelf)
+        GameObject train = _TrafficPool.GetTrain();
+        if(train != null)
         {
-            trainIn = null;
+            StartCoroutine(TrainSpawned(train, spawnTime));
         }
-        if (trainOut != null && !trainOut.activeSelf)
-        {
-            trainOut = null;
-        }
+    }
 
-        if(trainIn == null)
+    public Transform GetWaypoint(ITrafficObject trafficObject)
+    {
+        if (trafficObject.GetWaypointCount() == waypoints.Length)
         {
-            if(trainOut == null)
-            {
-                _TrafficLight.UpdateState(0, -1);
-                trainIn = _TrafficPool.GetTrain();
-                StartCoroutine(TrainSpawned(trainIn, 0));
-            }
+            return null;
         }
         else
         {
-            if (trainOut == null)
-            {
-                trainOut = _TrafficPool.GetTrain();
-                StartCoroutine(TrainSpawned(trainOut, 1));
-            }
+            return waypoints[trafficObject.GetWaypointCount()];
         }
     }
 
-    private void AddToQue()
+    public void RemoveFromQue()
     {
-        _TrafficLight.AddToQue();
+        trafficlight.RemoveFromQue();
     }
 
-    private void RemoveFromQue()
+    IEnumerator TrainSpawned(GameObject train, float spawntime)
     {
-        _TrafficLight.RemoveFromQue();
-    }
-
-    private bool Continue()
-    {
-        int state = _TrafficLight.GetState();
-
-        return state == 2;
-    }
-
-    public Transform GetWaypoint(TrainObject trainObject)
-    {
-        Transform waypoint = waypoints[trainObject.GetDirection()][trainObject.GetWaypointCount()];
-
-        if (trainObject.GetWaypointCount() == 2 && trainObject.GetDirection() == 1)
-        {
-            if (Continue())
-            {
-                return waypoint;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        else
-        {
-            return waypoint;
-        }
-    }
-
-    IEnumerator TrainSpawned(GameObject train, int direction)
-    {
-        AddToQue();
-        train.GetComponent<TrainObject>().InitTrain(this, direction);
-        yield return new WaitForSeconds(7);
-        // spoorbomen omlaag
-        // trein is gepasseerd
-        yield return new WaitForSeconds(7);
-        RemoveFromQue();
-        // spoorbomen omhoog
-        // lichten uit
-        _TrafficLight.UpdateState(2, -1);
+        yield return new WaitForSeconds(spawntime);
+        trafficlight.AddToQue();
+        
+        train.gameObject.GetComponent<TrainObject>().InitTrainObject(this);
     }
 
 }
