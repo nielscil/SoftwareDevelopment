@@ -64,6 +64,22 @@ public class ControlRunner implements Runnable
         return sortedList;
     }
     
+    private void turnGreenToOrange()
+    {
+        for(Light l : _intersection.getLights().stream().filter((l) -> getVehicleCount(l.Id).getPriorty() == 0).collect(Collectors.toList()))
+        {
+            if(l instanceof CrosswayLight || l instanceof TrainLight)
+            {
+                return;
+            }
+            
+            if(l.canSetStatus(State.Orange))
+            {
+                l.setStatus(State.Orange);
+            }
+        }
+    }
+    
     private void turnOrangeToRed()
     {
         for(Light l : _intersection.getLights().stream().filter((l) -> l.Status.isOrange()).collect(Collectors.toList()))
@@ -96,7 +112,7 @@ public class ControlRunner implements Runnable
                 turnOrangeToRed();
                 checkTrain();
                 checkOthers();
-                
+                turnGreenToOrange();
                 _intersection.saveChanges();
             }
             catch(Exception e)

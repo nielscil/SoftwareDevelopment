@@ -22,7 +22,7 @@ public class TrainTrack : MonoBehaviour
     {
         train = Instantiate(trainPrefab, Vector3.zero, Quaternion.identity);
         train.SetActive(false);
-        if(train != null && !trainActive)
+        if(!trainActive)
         {
             trainActive = true;
             StartCoroutine(TrainSpawned(train, spawnTime));

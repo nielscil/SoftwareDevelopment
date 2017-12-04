@@ -52,10 +52,6 @@ public class LightVehicleCount extends VehicleCount implements Comparable<LightV
             {
                 _light.setFirstVehicleTime(currentTime);
             }
-            else if(_count == 0 && _light.getFirstVehicleTime() != null)
-            {
-                _light.setFirstVehicleTime(null);
-            }
         }
     }
     

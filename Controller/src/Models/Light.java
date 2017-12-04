@@ -41,12 +41,21 @@ public class Light extends Observable
         return false;
     }
     
+    public boolean isInTrainClearanceTime()
+    {
+        if(Status.isRed())
+        {
+            return _statusChangedTime + 5 > ControlRunner.getTime();
+        }
+        return false;
+    }
+    
     public Long getFirstVehicleTime()
     {
         return _firstVehicleTime;
     }
     
-    public void setFirstVehicleTime(Long time)
+    public void setFirstVehicleTime(long time)
     {
         _firstVehicleTime = time;
     }
@@ -72,10 +81,20 @@ public class Light extends Observable
     
     public void setStatus(State state)
     {
-        if(canSetStatus(state))
+        setStatus(state, false);
+    }
+    
+    public void setStatus(State state, boolean override)
+    {
+        if(canSetStatus(state) || override)
         {
             Status = state;
             _statusChangedTime = ControlRunner.getTime();
+            
+            if(Status.isGreen())
+            {
+                _firstVehicleTime = null;
+            }
             unBlockDependencies();
             setChanged();
             notifyObservers();
@@ -182,13 +201,13 @@ public class Light extends Observable
             Light light = dependency.Light;
             
             boolean shouldAdd;
-            if(light instanceof CrosswayLight)
+            if(this instanceof CrosswayLight)
             {
-                shouldAdd = light.Status.isRed() || light.isInClearanceTime();
+                shouldAdd = shouldAddTrain(light);
             }
             else
             {
-                shouldAdd = light.Status.isGreen() || light.Status.isOrange() || light.isInClearanceTime();
+                shouldAdd = shouldAddNormal(light);
             }
             
             if (shouldAdd)
@@ -208,5 +227,33 @@ public class Light extends Observable
         });
         
         return list;
+    }
+    
+    private boolean shouldAddNormal(Light light)
+    {
+        boolean shouldAdd;
+        if(light instanceof CrosswayLight)
+        {
+            shouldAdd = light.Status.isRed() || light.isInClearanceTime();
+        }
+        else
+        {
+            shouldAdd = light.Status.isGreen() || light.Status.isOrange() || light.isInClearanceTime();
+        }
+        return shouldAdd;
+    }
+    
+    private boolean shouldAddTrain(Light light)
+    {
+        boolean shouldAdd;
+        if(light instanceof CrosswayLight)
+        {
+            shouldAdd = light.Status.isRed() || light.isInTrainClearanceTime();
+        }
+        else
+        {
+            shouldAdd = light.Status.isGreen() || light.Status.isOrange() || light.isInTrainClearanceTime();
+        }
+        return shouldAdd;
     }
 }

@@ -11,6 +11,7 @@ public class TrafficLight : MonoBehaviour
 
     private int State;
     private int TrafficInQue;
+    private object _syncLock = new object();
     private List<int> DirectionRequests;
     private GameObject[] _currentStateObjects;
     private MessageBroker _messageBroker;
@@ -53,20 +54,11 @@ public class TrafficLight : MonoBehaviour
     {
         
         TrafficUpdate update;
-        if (DirectionRequests.Count == 0)
-        {
-			update = new TrafficUpdate(ID, TrafficInQue);
-        }
-        else
-        {
-            int count = DirectionRequests.Count;
-            int[] directions = new int[count];
-            for (int i = 0; i < count; i++)
-            {
-                directions[i] = DirectionRequests[i];
-            }
 
-			update = new TrafficUpdate(ID, TrafficInQue, directions);
+        lock (_syncLock)
+        {
+            var array = DirectionRequests.ToArray();
+            update = new TrafficUpdate(ID, TrafficInQue, array.Length == 0 ? null : array);
         }
 
         _messageBroker.SendTrafficUpdate(update);
@@ -102,38 +94,80 @@ public class TrafficLight : MonoBehaviour
 
     public void AddToQue()
     {
-        TrafficInQue++;
+        lock(_syncLock)
+        {
+            TrafficInQue++;
+        }
+        
         SendTrafficUpdate();
     }
 
     public void AddToQue(int direction)
     {
-        TrafficInQue++;
-        DirectionRequests.Add(direction);
+        lock(_syncLock)
+        {
+            TrafficInQue++;
+            DirectionRequests.Add(direction);
+        }
+        
         SendTrafficUpdate();
     }
 
     public void RemoveFromQue()
     {
-        if(TrafficInQue > 0)
+        int queue = 0;
+
+        lock(_syncLock)
         {
-            TrafficInQue--;
+            queue = TrafficInQue;
+        }
+
+
+        if(queue > 0)
+        {
+            lock(_syncLock)
+            {
+                TrafficInQue--;
+            }
+            
             SendTrafficUpdate();
         }
     }
 
     public void RemoveFromQue(int direction)
     {
-        if (TrafficInQue > 0) //temp fix for negative count problem
+        int queue = 0;
+
+        lock (_syncLock)
         {
-            TrafficInQue--;
-            DirectionRequests.Remove(direction);
+            queue = TrafficInQue;
+        }
+
+        if (queue > 0) //temp fix for negative count problem
+        {
+            lock(_syncLock)
+            {
+                TrafficInQue--;
+                DirectionRequests.Remove(direction);
+            }
+
             SendTrafficUpdate();
         }
 
-        if(TrafficInQue == 0 && DirectionRequests.Count > 0) //temp fix for negative count problem
+        bool shouldUpdateEmpty = false;
+
+        lock(_syncLock)
         {
-            DirectionRequests.Clear();
+            shouldUpdateEmpty = TrafficInQue == 0 && DirectionRequests.Count > 0;
+        }
+
+        if(shouldUpdateEmpty) //temp fix for negative count problem
+        {
+            lock(_syncLock)
+            {
+                DirectionRequests.Clear();
+            }
+            
             SendTrafficUpdate();
         }
     }

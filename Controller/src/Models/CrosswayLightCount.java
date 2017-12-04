@@ -31,7 +31,7 @@ public class CrosswayLightCount extends LightVehicleCount implements Cloneable
     @Override
      public void calculatePriorty(long currentTime)
     {
-        _priority = (long)(_incoming ? 9000 : 0);
+        _priority = (long)(_incoming ? Long.MAX_VALUE : 0);
     }
      
     @Override

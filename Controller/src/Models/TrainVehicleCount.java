@@ -21,7 +21,7 @@ public class TrainVehicleCount extends LightVehicleCount implements Cloneable
     {
         if(_count > 0)
         {
-            _priority = (long)999999999;
+            _priority = Long.MAX_VALUE;
         }
         else
         {

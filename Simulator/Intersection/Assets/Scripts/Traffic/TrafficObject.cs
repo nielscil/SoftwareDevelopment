@@ -104,14 +104,13 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
                 {
                     if (_trafficType == TrafficType.busses)
                     {
-                        inQue = true;
                         _trafficlightInQue.AddToQue((int)_direction);
                     }
                     else
                     {
-                        inQue = true;
                         _trafficlightInQue.AddToQue();
                     }
+                    inQue = true;
                 }                
             }
             else

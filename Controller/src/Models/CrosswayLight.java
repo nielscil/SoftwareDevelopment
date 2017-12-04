@@ -44,7 +44,11 @@ public class CrosswayLight extends Light
     {
         _dependencies.stream().forEach((d) ->
         {
-            d.Light.setStatus(State.Orange);
+            if(d.Light.Status.isGreen())
+            {
+                d.Light.setStatus(State.Orange, true);
+            }
+            d.Light.block(this);
         });
     }
 }
