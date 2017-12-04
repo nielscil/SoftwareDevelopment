@@ -56,7 +56,7 @@ public class BlockingDependenciesChecker
     
     private void internalRun(Light light)
     {
-        light.BlockAllDependecies();
+        //light.BlockAllDependecies();
         CheckDependencies(light, light.GetBlockingDependencies());
     }
     
@@ -68,9 +68,16 @@ public class BlockingDependenciesChecker
                 .forEach((dependency) ->
         {
             boolean hasHigherPrio = ControlRunner.getVehicleCount(dependency.Light.Id).getPriorty() < _priority;
-            if(hasHigherPrio && dependency.Light.canSetStatus(State.Orange) && !(dependency.Light instanceof CrosswayLight))
+            if(hasHigherPrio && !(dependency.Light instanceof CrosswayLight))
             {
-                dependency.Light.setStatus(State.Orange);
+                if(dependency.Light.canSetStatus(State.Orange))
+                {
+                    dependency.Light.setStatus(State.Orange);
+                }
+                else
+                {
+                    dependency.Light.block(light);
+                }
             }
         });
     }
@@ -87,19 +94,19 @@ public class BlockingDependenciesChecker
         {
             if(_state.isGreen(Direction.Left))
             {
-                light.BlockAllDependecies(Direction.Left);
+                //light.BlockAllDependecies(Direction.Left);
                 dependencies.addAll(light.GetBlockingDependencies(Direction.Left));
             }
 
             if(_state.isGreen(Direction.Right))
             {
-                light.BlockAllDependecies(Direction.Right);
+                //light.BlockAllDependecies(Direction.Right);
                 dependencies.addAll(light.GetBlockingDependencies(Direction.Right));
             }
 
             if(_state.isGreen(Direction.StraightAhead))
             {
-                light.BlockAllDependecies(Direction.StraightAhead);
+                //light.BlockAllDependecies(Direction.StraightAhead);
                 dependencies.addAll(light.GetBlockingDependencies(Direction.StraightAhead));
             }
         }

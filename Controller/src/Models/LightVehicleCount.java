@@ -24,24 +24,40 @@ public class LightVehicleCount extends VehicleCount implements Comparable<LightV
         return _light;
     }
     
+    protected Long _firstVehicleTime = null;
     protected Long _priority = null;
     public void calculatePriorty(long currentTime)
     {
-        long timeAmount = currentTime - _light.getStatusChangedTime();
+        long timeAmount = 0;
         
-        if(_light.Status.isGreen())
+        setFirstVehicleTime(currentTime);
+        
+        if(_light.Status.isRed() && _count > 0)
         {
-            if(timeAmount > 5)
+            timeAmount = currentTime - _firstVehicleTime;
+            
+            if(timeAmount > 60)
             {
-                timeAmount = timeAmount * -1;
-            }
-            else
-            {
-                timeAmount = 0;
+                timeAmount += 9000; //increase prio when longer than 60 sec on red
             }
         }
         
         _priority = _count * 40 + timeAmount;
+    }
+    
+    private void setFirstVehicleTime(long currentTime)
+    {
+        if(_light.Status.isRed())
+        {
+            if(_count > 0 && _firstVehicleTime == null)
+            {
+                _firstVehicleTime = currentTime;
+            }
+            else if(_count == 0 && _firstVehicleTime != null)
+            {
+                _firstVehicleTime = null;
+            }
+        }
     }
     
     public long getPriorty()

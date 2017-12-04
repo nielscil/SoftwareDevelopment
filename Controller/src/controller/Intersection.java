@@ -35,16 +35,16 @@ public class Intersection extends Observable implements Observer
         _lightsMap = new HashMap<>();
         
         //normal traffic lights
-        AddLights(100, 10, 5);
+        AddLights(100, 10, 10);
         
         //bus traffic light
-        AddLights(200, 1, 7, BusLight.class);
+        AddLights(200, 1, 15, BusLight.class);
         
         //bicyle traffic lights
-        AddLights(300, 5, 5);
+        AddLights(300, 5, 15);
         
         //walk traffic lights
-        AddLights(400, 12, 8);
+        AddLights(400, 12, 15);
         
         //train lights
         AddLights(500, 2, 0, TrainLight.class);

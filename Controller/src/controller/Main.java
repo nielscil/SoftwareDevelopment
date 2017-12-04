@@ -21,12 +21,18 @@ public class Main
      */
     public static void main(String[] args) throws IOException
     {      
-        Intersection intersection = new Intersection();
-        String test = JsonHelper.instance().Serialize(intersection.GetSerializable());
-        
         String host = args.length > 0 ? args[0] : GetUserInput("What is the host address");
-        String username = args.length > 2 ? args[2] : GetUserInput("What is the username");
-        String password = args.length > 3 ? args[3] : GetUserInput("What is the password");
+        
+        String username = "";
+        String password = "";
+        
+        if(!host.equals("localhost"))
+        {
+            username = "softdev";
+            password = "softdev";
+        }
+        
+        
         boolean useGroup = !StringHelper.IsNullOrWhitespace(username) && !StringHelper.IsNullOrWhitespace(password);
         
         new Controller(host, username, password, useGroup);

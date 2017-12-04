@@ -115,15 +115,21 @@ public class TrafficLight : MonoBehaviour
 
     public void RemoveFromQue()
     {
-        TrafficInQue--;
-        SendTrafficUpdate();
+        if(TrafficInQue > 0)
+        {
+            TrafficInQue--;
+            SendTrafficUpdate();
+        }
     }
 
     public void RemoveFromQue(int direction)
     {
-        TrafficInQue--;
-        DirectionRequests.Remove(direction);
-        SendTrafficUpdate();
+        if (TrafficInQue > 0)
+        {
+            TrafficInQue--;
+            DirectionRequests.Remove(direction);
+            SendTrafficUpdate();
+        }
     }
 
     public int GetState()
