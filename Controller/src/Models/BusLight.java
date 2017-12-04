@@ -23,6 +23,10 @@ public class BusLight extends Light
     public BusLight(int id, int clearanceTime)
     {
         super(id, clearanceTime);
+        for(int i = 0; i < _statusChangedTimes.length; i++)
+        {
+            _statusChangedTimes[i] = 0;
+        }
     }
     
     @Override
@@ -50,6 +54,17 @@ public class BusLight extends Light
         }
     }
     
+    private long[] _statusChangedTimes = new long[3];
+    
+    public boolean isInClearanceTime(Direction direction)
+    {
+        if(Status.isRed() || (!Status.isGreen(direction) && !Status.isOrange()))
+        {
+            return _statusChangedTimes[direction.ordinal()] + _minClearanceTime > ControlRunner.getTime();
+        }
+        return false;
+    }
+    
     @Override
     public void addDependency(Light light)
     {
@@ -69,6 +84,35 @@ public class BusLight extends Light
             _dependencies.add(dependency);
         }
     }   
+    
+    @Override
+    public void setStatus(State state)
+    {
+        if(canSetStatus(state))
+        {
+            setChangedTime(state);
+        }
+        super.setStatus(state);
+    }
+    
+    private void setChangedTime(State state)
+    {
+        long time = ControlRunner.getTime();
+        if(state.isGreen(Direction.Left) || state.isOrange() || state.isRed())
+        {
+            _statusChangedTimes[1] = time;
+        }
+        
+        if(state.isGreen(Direction.Right) || state.isOrange() || state.isRed())
+        {
+            _statusChangedTimes[2] = time;
+        }
+        
+        if(state.isGreen(Direction.StraightAhead) || state.isOrange() || state.isRed())
+        {
+            _statusChangedTimes[0] = time;
+        }
+    }
     
     @Override
     public boolean canSetStatus(State newState)
@@ -114,6 +158,11 @@ public class BusLight extends Light
         }
         
         if(newState.isGreen() && isBlocked())
+        {
+            return false;
+        }
+        
+        if(newState.isOrange() && Status.isRed())
         {
             return false;
         }

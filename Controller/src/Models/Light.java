@@ -21,6 +21,7 @@ public class Light extends Observable
     protected int _statusChangedTime = 0;
     protected boolean _blocked = false;
     protected Light _blockedBy = null;
+    protected Long _firstVehicleTime = null;
     
     protected final transient List<Dependency> _dependencies = new ArrayList<>();
     protected final int _minClearanceTime;
@@ -40,6 +41,15 @@ public class Light extends Observable
         return false;
     }
     
+    public Long getFirstVehicleTime()
+    {
+        return _firstVehicleTime;
+    }
+    
+    public void setFirstVehicleTime(Long time)
+    {
+        _firstVehicleTime = time;
+    }
     
     public void addDependency(Light light)
     {
@@ -134,7 +144,7 @@ public class Light extends Observable
         return _blockedBy;
     }
     
-    private void unBlockDependencies()
+    protected void unBlockDependencies()
     {
         _dependencies.stream().filter((d) -> d.Light.isBlocked()).forEach((d) ->
         {
@@ -183,9 +193,9 @@ public class Light extends Observable
             
             if (shouldAdd)
             {
-                if(dependency.Direction != null && light instanceof BusLight && (!light.Status.isOrange()))
+                if(dependency.Direction != null && light instanceof BusLight && !light.Status.isOrange())
                 {
-                    if(light.Status.isGreen(dependency.Direction))
+                    if(light.Status.isGreen(dependency.Direction) || ((BusLight)light).isInClearanceTime(dependency.Direction))
                     {
                         list.add(dependency);
                     }

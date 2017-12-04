@@ -113,16 +113,20 @@ public class ControlRunner implements Runnable
         for(LightVehicleCount vehicleCount : sortedList)
         {
             boolean isTrainStuff = vehicleCount instanceof CrosswayLightCount || vehicleCount instanceof TrainVehicleCount;
-            if(vehicleCount instanceof BusVehicleCount)
+            
+            if(vehicleCount.getPriorty() > 0)
             {
-                if(vehicleCount.getPriorty() > 0)
+                if(vehicleCount instanceof BusVehicleCount)
                 {
-                    trySetBusLightToGreen((BusVehicleCount)vehicleCount);
+                    //if(vehicleCount.getPriorty() > 0)
+                    //{
+                        trySetBusLightToGreen((BusVehicleCount)vehicleCount);
+                    //}
                 }
-            }
-            else if(!isTrainStuff)
-            {
-                trySetLightToGreen(vehicleCount.getLight());
+                else if(!isTrainStuff)
+                {
+                    trySetLightToGreen(vehicleCount.getLight());
+                }
             }
         }
     }
@@ -180,7 +184,7 @@ public class ControlRunner implements Runnable
             {
                 if(crossWay.canSetStatus(State.Red))
                 {
-                    System.out.println(getTime() + ": Setting 601 to Red");
+                    //System.out.println(getTime() + ": Setting 601 to Red");
                     crossWay.setStatus(State.Red);
                 }
                 else
@@ -192,7 +196,7 @@ public class ControlRunner implements Runnable
             {
                 if(!trainWest.getLight().Status.isGreen())
                 {
-                    System.out.println(getTime() + ": Setting 501 to Green");
+                    //System.out.println(getTime() + ": Setting 501 to Green");
                     trainWest.getLight().setStatus(State.Green);
                 }
             }
@@ -201,11 +205,11 @@ public class ControlRunner implements Runnable
         {
             if(trainWest.getLight().Status.isGreen())
             {
-                System.out.println(getTime() + ": Setting 501 to Red");
+                //System.out.println(getTime() + ": Setting 501 to Red");
                 trainWest.getLight().setStatus(State.Red);
             }
             crossWay.setStatus(State.Green);
-            System.out.println(getTime() + ": Setting 601 to Green");
+            //System.out.println(getTime() + ": Setting 601 to Green");
         }
     }
     

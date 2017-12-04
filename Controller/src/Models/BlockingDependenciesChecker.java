@@ -56,7 +56,7 @@ public class BlockingDependenciesChecker
     
     private void internalRun(Light light)
     {
-        if(ControlRunner.getVehicleCount(light.Id).getPriorty() > 1000)
+        if(ControlRunner.getVehicleCount(light.Id).getPriorty() > 500)
         {
             light.BlockAllDependecies();
         }

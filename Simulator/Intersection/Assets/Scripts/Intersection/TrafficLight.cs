@@ -124,10 +124,16 @@ public class TrafficLight : MonoBehaviour
 
     public void RemoveFromQue(int direction)
     {
-        if (TrafficInQue > 0)
+        if (TrafficInQue > 0) //temp fix for negative count problem
         {
             TrafficInQue--;
             DirectionRequests.Remove(direction);
+            SendTrafficUpdate();
+        }
+
+        if(TrafficInQue == 0 && DirectionRequests.Count > 0) //temp fix for negative count problem
+        {
+            DirectionRequests.Clear();
             SendTrafficUpdate();
         }
     }
