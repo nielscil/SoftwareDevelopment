@@ -391,7 +391,7 @@ public class DependenciesHelper
     private void setEastDependencies()
     {
         Light l = getLight(LightNumber.BicycleSouthNorthEastSide_304);
-        setForBicycleWalkerEast(l);
+        setForBicycleEast(l);
         
         l = getLight(LightNumber.WalkNorthSouthEastSide_404);
         setForWalkerUpEast(l);
@@ -424,7 +424,7 @@ public class DependenciesHelper
         l.addDependency(getLight(LightNumber.NorthLeft_103));  
     }
     
-    private void setForBicycleWalkerEast(Light l)
+    private void setForBicycleEast(Light l)
     {
         setBusDepenency(l, Direction.Right);
         setBusDepenency(l, Direction.StraightAhead);

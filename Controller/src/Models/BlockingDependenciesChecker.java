@@ -56,7 +56,10 @@ public class BlockingDependenciesChecker
     
     private void internalRun(Light light)
     {
-        //light.BlockAllDependecies();
+        if(ControlRunner.getVehicleCount(light.Id).getPriorty() > 1000)
+        {
+            light.BlockAllDependecies();
+        }
         CheckDependencies(light, light.GetBlockingDependencies());
     }
     
@@ -88,25 +91,26 @@ public class BlockingDependenciesChecker
         
         if(_state == State.GreenAll)
         {
+            light.BlockAllDependecies();
             dependencies = light.GetBlockingDependencies();
         }
         else
         {
             if(_state.isGreen(Direction.Left))
             {
-                //light.BlockAllDependecies(Direction.Left);
+                light.BlockAllDependecies(Direction.Left);
                 dependencies.addAll(light.GetBlockingDependencies(Direction.Left));
             }
 
             if(_state.isGreen(Direction.Right))
             {
-                //light.BlockAllDependecies(Direction.Right);
+                light.BlockAllDependecies(Direction.Right);
                 dependencies.addAll(light.GetBlockingDependencies(Direction.Right));
             }
 
             if(_state.isGreen(Direction.StraightAhead))
             {
-                //light.BlockAllDependecies(Direction.StraightAhead);
+                light.BlockAllDependecies(Direction.StraightAhead);
                 dependencies.addAll(light.GetBlockingDependencies(Direction.StraightAhead));
             }
         }
