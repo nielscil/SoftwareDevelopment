@@ -52,6 +52,8 @@ public class BusVehicleCount extends LightVehicleCount implements Cloneable
     {
         _priority = (long)0;
         
+        setFirstVehicleTime(currentTime);
+        
         for(Direction direction : Direction.values())
         {
             int value = CountDirections(direction);
@@ -59,13 +61,25 @@ public class BusVehicleCount extends LightVehicleCount implements Cloneable
             _priority += value;
         }
         
+        long timeAmount = 0;
+        
+        if(_light.Status.isRed() && _count > 0)
+        {
+            timeAmount = currentTime - _light.getFirstVehicleTime();
+            
+            if(timeAmount > 60)
+            {
+                timeAmount += 3000; //increase prio when longer than 60 sec on red
+            }
+        }
+        _priority += timeAmount;
     }
     
     private int CountDirections(Direction direction)
     {
         if(_directionRequests != null)
         {
-            return (int)_directionRequests.stream().filter((d) -> (direction.equals(d))).count() * 1500;
+            return (int)_directionRequests.stream().filter((d) -> (direction.equals(d))).count() * 500;
         }
         return 0;
     }    

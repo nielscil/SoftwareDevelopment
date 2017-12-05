@@ -44,7 +44,7 @@ public class LightVehicleCount extends VehicleCount implements Comparable<LightV
         _priority = _count * 40 + timeAmount;
     }
     
-    private void setFirstVehicleTime(long currentTime)
+    protected void setFirstVehicleTime(long currentTime)
     {
         if(_light.Status.isRed())
         {
