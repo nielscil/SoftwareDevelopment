@@ -72,7 +72,7 @@ public class TrafficLight : MonoBehaviour
         }
         if(ID == 601)
         {
-            SetStateObjects(1);
+            UpdateMe(1);
             time = 12;
         }
             

@@ -124,7 +124,7 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
         else if (collision.GetComponent<TrafficObject>() != null && !collision.isTrigger)
         {
             Stop = true;
-            if (collision.GetComponent<TrafficObject>().inQue)
+            if (collision.GetComponent<TrafficObject>().inQue && collision.GetComponent<TrafficObject>()._trafficlightInQue.ID != 601)
             {
                 _trafficlightInQue = collision.GetComponent<TrafficObject>()._trafficlightInQue;
                 if (!inQue)
