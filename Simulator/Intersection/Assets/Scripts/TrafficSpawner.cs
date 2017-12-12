@@ -11,7 +11,7 @@ public class TrafficSpawner : MonoBehaviour {
 	void Start () {
         Lanes = gameObject.GetComponentsInChildren<Lane>();
         traintrack = gameObject.GetComponentsInChildren<TrainTrack>();
-        InvokeRepeating("SpawnTraffic", 5.0f, 2.0f);
+        InvokeRepeating("SpawnTraffic", 1.0f, 0.2f);
 	}
 
     private void Update()
@@ -30,7 +30,7 @@ public class TrafficSpawner : MonoBehaviour {
     private void SpawnTraffic()
     {
         int lane = Random.Range(0, Lanes.Length + 2);
-        int spawntrain = Random.Range(0, 2);
+        int spawnExtra = Random.Range(0, 20);
         if (lane == 25)
         {
             /*
@@ -43,6 +43,16 @@ public class TrafficSpawner : MonoBehaviour {
             if (spawntrain == 1)
                 traintrack[1].SpawnTraffic();*/
         }
+		else if(lane == 12)
+		{
+			if (spawnExtra == 1)
+				Lanes[lane].SpawnTraffic();
+		}
+		else if(lane == 13)
+		{
+			if (spawnExtra == 1)
+				Lanes[lane].SpawnTraffic();
+		}
         else
         {
             Lanes[lane].SpawnTraffic();

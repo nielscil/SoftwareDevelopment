@@ -94,7 +94,7 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<TrafficLight>() != null && collision.gameObject.transform.rotation == transform.rotation)
+        if (collision.GetComponent<TrafficLight>() != null && collision.gameObject.transform.rotation == transform.rotation && collision.GetComponent<TrafficLight>().ID != 601)
         {
             _trafficlightInQue = collision.GetComponent<TrafficLight>();
             _atTrafficLight = true;
@@ -139,6 +139,25 @@ public class TrafficObject : MonoBehaviour, ITrafficObject
                     }
 
                     inQue = true;
+                }
+            }
+        }
+        else if(collision.GetComponent<TrafficLight>() != null && collision.GetComponent<TrafficLight>().ID == 601)
+        {
+            _trafficlightInQue = collision.GetComponent<TrafficLight>();
+            _atTrafficLight = true;
+            if (!inQue)
+            {
+                if (!Continue(_trafficlightInQue.GetState()))
+                {
+                    inQue = true;
+                }
+            }
+            else
+            {
+                if (!Continue(_trafficlightInQue.GetState()))
+                {
+                    _atTrafficLight = true;
                 }
             }
         }
